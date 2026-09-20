@@ -1,0 +1,594 @@
+
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Қолжазбаны тану — SyrMura AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            color: #10223c;
+            background: #f2f5f9;
+            font-family: Arial, sans-serif;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 250px minmax(0, 1fr);
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            padding: 22px 16px;
+            color: white;
+            background: linear-gradient(
+                180deg,
+                #102f55,
+                #061a32
+            );
+        }
+
+        .brand {
+            padding: 0 10px 20px;
+            border-bottom: 1px solid
+                rgba(255,255,255,.13);
+        }
+
+        .brand h2 {
+            margin: 0;
+            font-size: 23px;
+        }
+
+        .brand span {
+            color: #e6b85e;
+        }
+
+        .brand p {
+            margin: 7px 0 0;
+            color: #aebfd5;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .menu {
+            margin-top: 19px;
+        }
+
+        .menu a {
+            display: block;
+            margin-bottom: 5px;
+            padding: 12px 13px;
+            border-radius: 8px;
+            color: #edf5ff;
+            text-decoration: none;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            color: #f3c66c;
+            background: rgba(255,255,255,.13);
+        }
+
+        main {
+            min-width: 0;
+            padding: 24px 30px 50px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .topbar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .back {
+            padding: 10px 15px;
+            border: 1px solid #d5aa51;
+            border-radius: 8px;
+            color: #173d67;
+            text-decoration: none;
+        }
+
+        .hero {
+            margin-bottom: 20px;
+            padding: 22px;
+            border-radius: 14px;
+            color: white;
+            background: linear-gradient(
+                135deg,
+                #173d67,
+                #1a5c94
+            );
+        }
+
+        .hero h2 {
+            margin: 0 0 8px;
+            color: #f1c46c;
+        }
+
+        .hero p {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            padding: 22px;
+            border: 1px solid #dce4ee;
+            border-radius: 14px;
+            background: white;
+            box-shadow: 0 5px 18px
+                rgba(20,48,82,.06);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input[type="file"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccd7e4;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            background: white;
+        }
+
+        textarea {
+            min-height: 350px;
+            line-height: 1.6;
+            resize: vertical;
+        }
+
+        .help {
+            margin: 8px 0 0;
+            color: #6c7d91;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 13px 21px;
+            border: 0;
+            border-radius: 8px;
+            color: white;
+            background: #1389c5;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background: #0874aa;
+        }
+
+        .button.download {
+            background: #22965d;
+        }
+
+        .notice {
+            margin-bottom: 18px;
+            padding: 13px 16px;
+            border-left: 4px solid #20a067;
+            border-radius: 7px;
+            background: #e9fff4;
+        }
+
+        .notice.error {
+            border-left-color: #d14343;
+            background: #fff0f0;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns:
+                minmax(280px, .8fr)
+                minmax(400px, 1.2fr);
+            gap: 20px;
+        }
+
+        .preview {
+            overflow: hidden;
+            border: 1px solid #dce4ee;
+            border-radius: 10px;
+            background: #e4e9ef;
+        }
+
+        .preview img {
+            display: block;
+            width: 100%;
+            height: 470px;
+            object-fit: contain;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .warning {
+            margin-top: 16px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            color: #795615;
+            background: #fff7df;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 900px) {
+            .layout {
+                display: block;
+            }
+
+            main {
+                padding: 18px;
+            }
+
+            .grid,
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .preview img {
+                height: 320px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <h2>SyrMura <span>AI</span></h2>
+
+            <p>
+                Қызылорда облысының<br>
+                цифрлық архиві
+            </p>
+        </div>
+
+        <nav class="menu">
+            <a href="/">🏠 Басты бет</a>
+            <a href="/admin">📊 Басқару панелі</a>
+            <a href="/admin/upload">📥 Құжат жүктеу</a>
+
+<a href="/digitization">
+    <span class="menu-icon">📥</span>
+    <span>Құжатты цифрландыру</span>
+</a>
+
+            <a href="/ocr">🔠 OCR — мәтінді тану</a>
+
+            <a
+                class="active"
+                href="/handwriting-recognition"
+            >
+                ✍️ Қолжазбаны тану
+            </a>
+
+            <a href="/quality-check">
+                📊 Сапаны бағалау
+            </a>
+
+            <a href="/document-restoration">
+                🪄 Құжатты қалпына келтіру
+            </a>
+
+            <a href="/archive">📁 Мұрағат</a>
+            <a href="/admin/logout">🚪 Шығу</a>
+        </nav>
+    </aside>
+
+    <main>
+        <div class="topbar">
+            <h1>Қолжазбаны тану</h1>
+
+            <a class="back" href="/admin">
+                Басқару панелі
+            </a>
+        </div>
+
+        <section class="hero">
+            <h2>Қолжазбаны мәтінге айналдыру</h2>
+
+            <p>
+                Қолжазба немесе ескі құжат суретін
+                жүктеп, мәтінді автоматты түрде
+                тануға болады.
+            </p>
+        </section>
+
+        {% with messages =
+            get_flashed_messages(
+                with_categories=true
+            )
+        %}
+            {% for category, message in messages %}
+                <div class="
+                    notice
+                    {% if category == 'error' %}
+                        error
+                    {% endif %}
+                ">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <section class="card">
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+            >
+                <input
+                    type="hidden"
+                    name="handwriting_csrf"
+                    value="{{ handwriting_csrf }}"
+                >
+
+                <div class="grid">
+                    <div class="full">
+                        <label>
+                            Қолжазба суретін таңдаңыз
+                        </label>
+
+                        <input
+                            type="file"
+                            name="handwriting_image"
+                            accept=".jpg,.jpeg,.png,.tif,.tiff"
+                            required
+                        >
+
+                        <p class="help">
+                            JPG, JPEG, PNG немесе TIFF.
+                            Файл көлемі 25 МБ-тан аспауы керек.
+                        </p>
+                    </div>
+
+                    <div>
+                        <label>Құжат тілі</label>
+
+                        <select name="language">
+                            <option value="kaz">
+                                Қазақ тілі
+                            </option>
+
+                            <option value="rus">
+                                Орыс тілі
+                            </option>
+
+                            <option value="kaz+rus">
+                                Қазақша және орысша
+                            </option>
+
+                            <option value="eng">
+                                Ағылшын тілі
+                            </option>
+                        
+
+
+
+
+
+
+
+
+
+
+<option value="ara" selected>
+    Араб тілі
+</option>
+
+<option value="kaz+ara">
+    Қазақша және арабша
+</option>
+
+<option value="rus+ara">
+    Орысша және арабша
+</option>
+</select>
+                    </div>
+
+                    <div>
+                        <label>Өңдеу тәсілі</label>
+
+                        <select name="processing">
+                            <option value="standard">
+                                Қалыпты өңдеу
+                            </option>
+
+                            <option value="strong">
+                                Әлсіз жазуды күшейту
+                            </option>
+
+                            <option value="grayscale">
+                                Ақ-қара режим
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="full">
+                        <button class="button" type="submit">
+                            ✍️ Мәтінді тану
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="warning">
+                Ескерту: өте көмескі немесе күрделі қолжазба
+                толық танылмауы мүмкін. Танылған мәтінді төмендегі
+                өрісте қолмен түзетуге болады.
+            </div>
+        </section>
+
+        {% if image_url %}
+            <section class="card">
+                
+<!-- OCR V2 RESULT INFORMATION -->
+
+{% if image_url %}
+<div style="
+    display:grid;
+    grid-template-columns:repeat(
+        3,
+        minmax(0,1fr)
+    );
+    gap:12px;
+    margin-bottom:18px;
+">
+    <div style="
+        padding:13px;
+        border-radius:9px;
+        background:#eef5fc;
+    ">
+        <strong>Қолданылған тіл</strong><br>
+        {{ ocr_language_used or 'Белгісіз' }}
+    </div>
+
+    <div style="
+        padding:13px;
+        border-radius:9px;
+        background:#eef9f3;
+    ">
+        <strong>Тану сенімділігі</strong><br>
+        {{ ocr_confidence or 0 }}%
+    </div>
+
+    <div style="
+        padding:13px;
+        border-radius:9px;
+        background:#fff7df;
+    ">
+        <strong>Суретті бұру</strong><br>
+        {{ rotation_used or 0 }}°
+    </div>
+</div>
+
+{% if ocr_warning %}
+<div style="
+    margin-bottom:18px;
+    padding:14px;
+    border-left:4px solid #dc9c23;
+    border-radius:8px;
+    color:#714e0d;
+    background:#fff6da;
+    line-height:1.5;
+">
+    ⚠️ {{ ocr_warning }}
+</div>
+{% endif %}
+{% endif %}
+
+<div class="result-grid">
+
+                    <div>
+                        <label>Өңделген құжат</label>
+
+                        <div class="preview">
+                            <img
+                                src="{{ image_url }}"
+                                alt="Қолжазба құжаты"
+                            >
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Танылған мәтін</label>
+
+                        <textarea
+                            id="recognizedText"
+                        >{{ recognized_text }}</textarea>
+
+                        <div class="actions">
+                            <button
+                                class="button"
+                                type="button"
+                                onclick="copyText()"
+                            >
+                                📋 Мәтінді көшіру
+                            </button>
+
+                            {% if download_url %}
+                                <a
+                                    class="button download"
+                                    href="{{ download_url }}"
+                                >
+                                    ⬇️ TXT жүктеу
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+    </main>
+</div>
+
+<script>
+function copyText() {
+    const textArea =
+        document.getElementById("recognizedText");
+
+    if (!textArea) {
+        return;
+    }
+
+    textArea.select();
+    textArea.setSelectionRange(
+        0,
+        textArea.value.length
+    );
+
+    navigator.clipboard
+        .writeText(textArea.value)
+        .then(function () {
+            alert("Мәтін көшірілді");
+        })
+        .catch(function () {
+            document.execCommand("copy");
+            alert("Мәтін көшірілді");
+        });
+}
+</script>
+</body>
+</html>

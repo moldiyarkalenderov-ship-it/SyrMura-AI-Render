@@ -1,0 +1,1498 @@
+
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>QR-кодтар — SyrMura AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            color: #10243d;
+            background: #eef3f8;
+            font-family: Arial, sans-serif;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 72px;
+            padding: 0 5%;
+            color: white;
+            background: #071b33;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            display: grid;
+            place-items: center;
+            width: 43px;
+            height: 43px;
+            border: 2px solid #dcb15c;
+            border-radius: 50%;
+            color: #edc879;
+            font-family: Georgia, serif;
+            font-size: 25px;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 21px;
+        }
+
+        .brand span {
+            color: #ecc474;
+        }
+
+        .navigation {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+
+        .navigation a {
+            padding: 9px 14px;
+            border: 1px solid #987637;
+            border-radius: 7px;
+            color: #f0cb81;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .navigation a:hover {
+            color: #10233b;
+            background: #edc675;
+        }
+
+        .hero {
+            padding: 44px 20px 30px;
+            color: white;
+            background:
+                linear-gradient(
+                    135deg,
+                    #123b65,
+                    #0b2542
+                );
+            text-align: center;
+        }
+
+        .hero h2 {
+            margin: 0 0 10px;
+            color: #efc777;
+            font-family: Georgia, serif;
+            font-size: clamp(32px, 5vw, 52px);
+        }
+
+        .hero p {
+            max-width: 750px;
+            margin: 0 auto;
+            color: #d3dfeb;
+            line-height: 1.6;
+        }
+
+        .notice {
+            max-width: 1120px;
+            margin: 20px auto;
+            padding: 13px 17px;
+            border-left: 4px solid #d9ad57;
+            border-radius: 8px;
+            color: #5e4a20;
+            background: #fff7e6;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px 25px 60px;
+        }
+
+        .qr-card {
+            overflow: hidden;
+            border: 1px solid #d8e0e9;
+            border-radius: 14px;
+            background: white;
+            box-shadow:
+                0 8px 22px rgba(21,47,77,.08);
+            transition: .25s;
+        }
+
+        .qr-card:hover {
+            transform: translateY(-5px);
+            box-shadow:
+                0 14px 30px rgba(21,47,77,.15);
+        }
+
+        .qr-preview {
+            display: grid;
+            place-items: center;
+            min-height: 230px;
+            padding: 18px;
+            background:
+                linear-gradient(
+                    145deg,
+                    #f8fafc,
+                    #e8eef5
+                );
+        }
+
+        .qr-preview img {
+            width: 190px;
+            height: 190px;
+            border: 8px solid white;
+            border-radius: 8px;
+            object-fit: contain;
+            box-shadow:
+                0 5px 18px rgba(0,0,0,.12);
+        }
+
+        .qr-info {
+            padding: 17px;
+        }
+
+        .qr-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 9px;
+            color: #9a7027;
+            font-size: 12px;
+        }
+
+        .qr-info h3 {
+            margin: 0 0 9px;
+            font-size: 18px;
+            line-height: 1.35;
+        }
+
+        .qr-info p {
+            margin: 0;
+            color: #6b7989;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .actions a {
+            padding: 10px 8px;
+            border-radius: 7px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .view-button {
+            color: white;
+            background: #1489be;
+        }
+
+        .download-button {
+            color: #172842;
+            background: #efd08d;
+        }
+
+        .empty {
+            grid-column: 1 / -1;
+            padding: 60px 20px;
+            border: 1px dashed #a8b7c8;
+            border-radius: 12px;
+            color: #718196;
+            background: white;
+            text-align: center;
+        }
+
+        .footer {
+            padding: 20px;
+            color: #77889b;
+            background: #e2e9f1;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        @media (max-width: 650px) {
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 12px;
+                padding: 14px 18px;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+<!-- SYRMURA GLOBAL SIDEBAR CSS START -->
+<style>
+:root {
+    --syrmura-sidebar-width: 285px;
+    --syrmura-sidebar-dark: #061a31;
+    --syrmura-sidebar-light: #12375d;
+    --syrmura-gold: #efbd61;
+    --syrmura-menu-text: #edf5ff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    padding-left: var(--syrmura-sidebar-width) !important;
+    margin-left: 0 !important;
+    min-height: 100vh !important;
+}
+
+.syrmura-global-sidebar {
+    display: block !important;
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: var(--syrmura-sidebar-width) !important;
+    min-width: var(--syrmura-sidebar-width) !important;
+    max-width: var(--syrmura-sidebar-width) !important;
+    height: 100vh !important;
+    padding: 22px 18px !important;
+    margin: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    color: var(--syrmura-menu-text) !important;
+    background: linear-gradient(
+        180deg,
+        var(--syrmura-sidebar-light) 0%,
+        var(--syrmura-sidebar-dark) 100%
+    ) !important;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.15) !important;
+    z-index: 99999 !important;
+    font-family: Arial, sans-serif !important;
+}
+
+.syrmura-global-sidebar .brand {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 0 8px 20px !important;
+    margin: 0 0 15px !important;
+    border-bottom: 1px solid rgba(255,255,255,0.14) !important;
+}
+
+.syrmura-global-sidebar .brand-icon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    border: 2px solid var(--syrmura-gold) !important;
+    border-radius: 50% !important;
+    color: var(--syrmura-gold) !important;
+    font-family: Georgia, serif !important;
+    font-size: 27px !important;
+}
+
+.syrmura-global-sidebar .brand h2 {
+    margin: 0 !important;
+    color: #fff !important;
+    font-size: 21px !important;
+    line-height: 1.2 !important;
+}
+
+.syrmura-global-sidebar .brand h2 span {
+    color: var(--syrmura-gold) !important;
+}
+
+.syrmura-global-sidebar .brand p {
+    margin: 5px 0 0 !important;
+    color: #9fb7d1 !important;
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+}
+
+.syrmura-global-sidebar nav,
+.syrmura-global-sidebar .side-menu {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 5px !important;
+    width: 100% !important;
+}
+
+.syrmura-global-sidebar a,
+.syrmura-global-sidebar summary {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+    min-height: 48px !important;
+    padding: 11px 13px !important;
+    margin: 0 !important;
+    color: var(--syrmura-menu-text) !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-left: 3px solid transparent !important;
+    border-radius: 10px !important;
+    text-decoration: none !important;
+    list-style: none !important;
+    cursor: pointer !important;
+    font-size: 15px !important;
+    line-height: 1.3 !important;
+    white-space: normal !important;
+}
+
+.syrmura-global-sidebar summary::-webkit-details-marker {
+    display: none !important;
+}
+
+.syrmura-global-sidebar a:hover,
+.syrmura-global-sidebar summary:hover {
+    color: var(--syrmura-gold) !important;
+    background: rgba(255,255,255,0.10) !important;
+}
+
+.syrmura-global-sidebar a.active {
+    color: var(--syrmura-gold) !important;
+    background: rgba(255,255,255,0.14) !important;
+    border-left-color: var(--syrmura-gold) !important;
+}
+
+.syrmura-global-sidebar .menu-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 24px !important;
+    min-width: 24px !important;
+    font-size: 16px !important;
+}
+
+.syrmura-global-sidebar details {
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.syrmura-global-sidebar .submenu {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 3px !important;
+    padding: 3px 0 5px 35px !important;
+}
+
+.syrmura-global-sidebar .submenu a {
+    min-height: 37px !important;
+    padding: 8px 10px !important;
+    color: #bfd0e2 !important;
+    font-size: 13px !important;
+    border-radius: 7px !important;
+}
+
+@media (max-width: 900px) {
+    :root {
+        --syrmura-sidebar-width: 240px;
+    }
+
+    .syrmura-global-sidebar {
+        padding: 18px 12px !important;
+    }
+
+    .syrmura-global-sidebar a,
+    .syrmura-global-sidebar summary {
+        font-size: 14px !important;
+    }
+}
+</style>
+<!-- SYRMURA GLOBAL SIDEBAR CSS END -->
+
+
+<!-- MAIN SECTION LINKS STYLE START -->
+<style>
+.sidebar .main-section-link,
+.syrmura-global-sidebar .main-section-link,
+.persistent-public-sidebar .main-section-link {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+    min-height: 48px !important;
+    padding: 11px 13px !important;
+    margin: 0 0 5px 0 !important;
+    color: #edf5ff !important;
+    background: transparent !important;
+    border-left: 3px solid transparent !important;
+    border-radius: 10px !important;
+    text-decoration: none !important;
+    font-size: 15px !important;
+    line-height: 1.3 !important;
+    cursor: pointer !important;
+}
+
+.sidebar .main-section-link:hover,
+.syrmura-global-sidebar .main-section-link:hover,
+.persistent-public-sidebar .main-section-link:hover {
+    color: #efbd61 !important;
+    background: rgba(255,255,255,0.10) !important;
+}
+
+.sidebar .main-section-link.active,
+.syrmura-global-sidebar .main-section-link.active,
+.persistent-public-sidebar .main-section-link.active {
+    color: #efbd61 !important;
+    background: rgba(255,255,255,0.14) !important;
+    border-left-color: #efbd61 !important;
+}
+
+.sidebar .main-section-link .menu-icon,
+.syrmura-global-sidebar .main-section-link .menu-icon,
+.persistent-public-sidebar .main-section-link .menu-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 24px !important;
+    min-width: 24px !important;
+}
+
+/* Ескі бөлімшелерді толық жасыру */
+.sidebar .submenu,
+.syrmura-global-sidebar .submenu,
+.persistent-public-sidebar .submenu {
+    display: none !important;
+}
+</style>
+<!-- MAIN SECTION LINKS STYLE END -->
+
+
+<!-- MODE SWITCH STYLE START -->
+<style>
+    .sidebar .mode-switch-divider {
+        flex: 0 0 auto !important;
+        width: calc(100% - 16px) !important;
+        height: 1px !important;
+        margin: 15px 8px 9px !important;
+        background: rgba(255,255,255,0.17) !important;
+    }
+
+    .sidebar .mode-switch-link {
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 11px !important;
+
+        width: 100% !important;
+        min-height: 48px !important;
+        padding: 10px 12px !important;
+        margin: 0 !important;
+
+        color: #f5d792 !important;
+        background: rgba(239,189,97,0.09) !important;
+
+        border: 1px solid rgba(239,189,97,0.25) !important;
+        border-left: 3px solid #efbd61 !important;
+        border-radius: 9px !important;
+
+        text-decoration: none !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        line-height: 1.25 !important;
+
+        box-sizing: border-box !important;
+        transition:
+            background 0.12s ease,
+            color 0.12s ease,
+            transform 0.08s ease,
+            box-shadow 0.08s ease !important;
+    }
+
+    .sidebar .mode-switch-link:hover {
+        color: #ffffff !important;
+        background: rgba(239,189,97,0.20) !important;
+    }
+
+    .sidebar .mode-switch-link:active {
+        color: #ffffff !important;
+        background: #b68129 !important;
+        transform: translateY(3px) !important;
+        box-shadow:
+            inset 0 3px 7px rgba(0,0,0,0.30) !important;
+    }
+
+    .sidebar .mode-switch-link .menu-icon {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 24px !important;
+        min-width: 24px !important;
+    }
+
+    .sidebar .admin-mode-link {
+        color: #ffd98b !important;
+        background: rgba(210,145,32,0.13) !important;
+    }
+
+    .sidebar .user-mode-link {
+        color: #bfe3fa !important;
+        background: rgba(61,154,207,0.12) !important;
+        border-color: rgba(89,184,231,0.30) !important;
+        border-left-color: #5db8e5 !important;
+    }
+
+    .sidebar .user-mode-link:hover {
+        background: rgba(61,154,207,0.24) !important;
+    }
+</style>
+<!-- MODE SWITCH STYLE END -->
+
+
+<!-- PERSISTENT KEY STYLE START -->
+<style>
+    /*
+       Барлық мәзір батырмасының негізгі өлшемі.
+       Таңдалған кезде көрші батырмалар қозғалмайды.
+    */
+    .sidebar nav a,
+    .sidebar .side-menu a {
+        position: relative !important;
+        box-sizing: border-box !important;
+
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        min-height: 48px !important;
+
+        margin: 0 !important;
+        padding: 10px 12px !important;
+
+        border: 1px solid transparent !important;
+        border-left: 3px solid transparent !important;
+        border-radius: 9px !important;
+
+        transform: translateY(0) !important;
+
+        transition:
+            color 0.12s ease,
+            background-color 0.12s ease,
+            border-color 0.12s ease,
+            box-shadow 0.10s ease,
+            transform 0.08s ease !important;
+    }
+
+    /*
+       Басылып таңдалған және сол күйде сақталатын батырма
+    */
+    .sidebar nav a.key-selected,
+    .sidebar .side-menu a.key-selected,
+    .sidebar nav a.active,
+    .sidebar .side-menu a.active {
+        color: #ffffff !important;
+        background:
+            linear-gradient(
+                180deg,
+                #bd8932 0%,
+                #95651f 100%
+            ) !important;
+
+        border-color: #d7a84f !important;
+        border-left-color: #ffe2a0 !important;
+
+        /*
+           Батырма перне сияқты ішке басылып тұрады.
+           Transform басқа батырмалардың орнын өзгертпейді.
+        */
+        transform: translateY(2px) !important;
+
+        box-shadow:
+            inset 0 4px 8px rgba(0,0,0,0.33),
+            inset 0 -1px 1px rgba(255,255,255,0.12),
+            0 1px 0 rgba(255,255,255,0.10) !important;
+
+        font-weight: 700 !important;
+    }
+
+    /*
+       Таңдалған перненің сол жағындағы жарық белгі
+    */
+    .sidebar nav a.key-selected::before,
+    .sidebar .side-menu a.key-selected::before,
+    .sidebar nav a.active::before,
+    .sidebar .side-menu a.active::before {
+        content: "" !important;
+        position: absolute !important;
+        left: -3px !important;
+        top: 8px !important;
+        bottom: 8px !important;
+        width: 3px !important;
+
+        background: #ffe09a !important;
+        border-radius: 0 4px 4px 0 !important;
+        box-shadow: 0 0 8px rgba(255,216,128,0.65) !important;
+    }
+
+    /*
+       Тінтуір дәл басылып тұрған сәттегі терең әсер
+    */
+    .sidebar nav a:active,
+    .sidebar .side-menu a:active,
+    .sidebar nav a.key-pressing,
+    .sidebar .side-menu a.key-pressing {
+        color: #ffffff !important;
+        background: #7f5318 !important;
+        border-color: #69400f !important;
+        border-left-color: #fff0be !important;
+
+        transform: translateY(4px) !important;
+
+        box-shadow:
+            inset 0 6px 10px rgba(0,0,0,0.43),
+            0 0 0 1px rgba(255,255,255,0.04) !important;
+    }
+
+    .sidebar nav a.key-selected .menu-icon,
+    .sidebar .side-menu a.key-selected .menu-icon,
+    .sidebar nav a.active .menu-icon,
+    .sidebar .side-menu a.active .menu-icon {
+        filter:
+            brightness(1.15)
+            drop-shadow(0 1px 1px rgba(0,0,0,0.25));
+    }
+
+    /*
+       Режим ауыстыру батырмалары да дәл солай белгіленеді
+    */
+    .sidebar a.mode-switch-link.key-selected {
+        color: #ffffff !important;
+        background:
+            linear-gradient(
+                180deg,
+                #258abb,
+                #176386
+            ) !important;
+
+        border-color: #63bce5 !important;
+        border-left-color: #c7edff !important;
+
+        box-shadow:
+            inset 0 4px 8px rgba(0,0,0,0.30),
+            0 1px 0 rgba(255,255,255,0.10) !important;
+    }
+
+    .sidebar nav a:focus-visible,
+    .sidebar .side-menu a:focus-visible {
+        outline: 2px solid #ffe09a !important;
+        outline-offset: 2px !important;
+    }
+</style>
+<!-- PERSISTENT KEY STYLE END -->
+
+
+<!-- ZERO MOVEMENT MENU FIX START -->
+<style>
+    /*
+       Мәзірдің барлық батырмасы бірдей тұрақты өлшемде.
+    */
+    .sidebar nav,
+    .sidebar .side-menu {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 5px !important;
+        width: 100% !important;
+    }
+
+    .sidebar nav > a,
+    .sidebar .side-menu > a,
+    .sidebar nav > a:hover,
+    .sidebar .side-menu > a:hover,
+    .sidebar nav > a:active,
+    .sidebar .side-menu > a:active,
+    .sidebar nav > a.active,
+    .sidebar .side-menu > a.active,
+    .sidebar nav > a.key-selected,
+    .sidebar .side-menu > a.key-selected,
+    .sidebar nav > a.key-pressing,
+    .sidebar .side-menu > a.key-pressing {
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        flex: 0 0 48px !important;
+        gap: 11px !important;
+
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+
+        height: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+
+        padding: 10px 12px !important;
+        margin: 0 !important;
+
+        border-width: 1px 1px 1px 3px !important;
+        border-style: solid !important;
+        border-radius: 9px !important;
+
+        box-sizing: border-box !important;
+
+        /*
+           Ешқандай бағытта қозғалмайды.
+        */
+        transform: none !important;
+        translate: none !important;
+        scale: 1 !important;
+
+        line-height: 1.25 !important;
+        text-decoration: none !important;
+    }
+
+    /*
+       Қалыпты батырма
+    */
+    .sidebar nav > a,
+    .sidebar .side-menu > a {
+        color: #eaf3fc !important;
+        background: transparent !important;
+        border-color: transparent !important;
+    }
+
+    /*
+       Тінтуірді апарғандағы әсер.
+       Өлшемі мен орны өзгермейді.
+    */
+    .sidebar nav > a:hover,
+    .sidebar .side-menu > a:hover {
+        color: #efbd61 !important;
+        background: rgba(255,255,255,0.09) !important;
+        border-color:
+            rgba(239,189,97,0.22)
+            rgba(239,189,97,0.22)
+            rgba(239,189,97,0.22)
+            #efbd61 !important;
+
+        transform: none !important;
+    }
+
+    /*
+       Таңдалған батырма.
+       Перне басылғандай көрінеді, бірақ қозғалмайды.
+    */
+    .sidebar nav > a.active,
+    .sidebar .side-menu > a.active,
+    .sidebar nav > a.key-selected,
+    .sidebar .side-menu > a.key-selected {
+        color: #ffffff !important;
+
+        background:
+            linear-gradient(
+                180deg,
+                #b9822c 0%,
+                #91601c 100%
+            ) !important;
+
+        border-color:
+            #d8a74d
+            #d8a74d
+            #70450e
+            #ffe09a !important;
+
+        transform: none !important;
+
+        box-shadow:
+            inset 0 4px 8px rgba(0,0,0,0.34),
+            inset 0 -1px 1px rgba(255,255,255,0.10),
+            0 0 0 1px rgba(255,224,154,0.05) !important;
+
+        font-weight: 700 !important;
+    }
+
+    /*
+       Тінтуір нақты басылып тұрған қысқа сәт.
+       Бұл кезде де қозғалыс болмайды.
+    */
+    .sidebar nav > a:active,
+    .sidebar .side-menu > a:active,
+    .sidebar nav > a.key-pressing,
+    .sidebar .side-menu > a.key-pressing {
+        color: #ffffff !important;
+        background: #75470f !important;
+
+        border-color:
+            #5b3308
+            #5b3308
+            #452400
+            #fff0bd !important;
+
+        transform: none !important;
+
+        box-shadow:
+            inset 0 6px 11px rgba(0,0,0,0.48) !important;
+    }
+
+    /*
+       Бұрынғы ::before белгісі де өлшемге әсер етпейді.
+    */
+    .sidebar nav > a::before,
+    .sidebar .side-menu > a::before {
+        box-sizing: border-box !important;
+        pointer-events: none !important;
+    }
+
+    /*
+       Белгіше мен мәтін орны тұрақты.
+    */
+    .sidebar nav > a .menu-icon,
+    .sidebar .side-menu > a .menu-icon {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 0 0 24px !important;
+
+        width: 24px !important;
+        min-width: 24px !important;
+        max-width: 24px !important;
+
+        height: 24px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .sidebar nav > a span:last-child,
+    .sidebar .side-menu > a span:last-child {
+        flex: 1 1 auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /*
+       Режим ауыстыру батырмалары да қозғалмайды.
+    */
+    .sidebar a.mode-switch-link,
+    .sidebar a.mode-switch-link:hover,
+    .sidebar a.mode-switch-link:active,
+    .sidebar a.mode-switch-link.key-selected {
+        height: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+        padding: 10px 12px !important;
+        margin: 0 !important;
+        transform: none !important;
+    }
+</style>
+<!-- ZERO MOVEMENT MENU FIX END -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- STATIC ACTIVE MENU START -->
+<style>
+    /*
+       Барлық әкімші батырмасы тұрақты қалыпта болады.
+    */
+    .sidebar nav > a,
+    .sidebar .side-menu > a,
+    .sidebar nav > a:hover,
+    .sidebar .side-menu > a:hover,
+    .sidebar nav > a:active,
+    .sidebar .side-menu > a:active,
+    .sidebar nav > a.active,
+    .sidebar .side-menu > a.active,
+    .sidebar nav > a.key-selected,
+    .sidebar .side-menu > a.key-selected,
+    .sidebar nav > a.key-pressing,
+    .sidebar .side-menu > a.key-pressing {
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        flex: 0 0 46px !important;
+        gap: 10px !important;
+
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+
+        height: 46px !important;
+        min-height: 46px !important;
+        max-height: 46px !important;
+
+        padding: 9px 11px !important;
+        margin: 0 !important;
+
+        border-width: 0 0 0 3px !important;
+        border-style: solid !important;
+        border-color: transparent !important;
+        border-radius: 8px !important;
+
+        box-sizing: border-box !important;
+
+        /*
+           Ешқандай секіру, жылжу және анимация болмайды.
+        */
+        transform: none !important;
+        translate: none !important;
+        scale: 1 !important;
+        transition: none !important;
+        animation: none !important;
+
+        box-shadow: none !important;
+        text-decoration: none !important;
+    }
+
+    /*
+       Қалыпты батырма.
+    */
+    .sidebar nav > a,
+    .sidebar .side-menu > a {
+        color: #edf4fb !important;
+        background: transparent !important;
+        border-left-color: transparent !important;
+        font-weight: 400 !important;
+    }
+
+    /*
+       Тінтуірді апарғанда ғана жеңіл фон.
+    */
+    .sidebar nav > a:hover,
+    .sidebar .side-menu > a:hover {
+        color: #f2c66e !important;
+        background: rgba(255,255,255,0.07) !important;
+        border-left-color: rgba(242,198,110,0.45) !important;
+
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    /*
+       Ашық тұрған бөлім:
+       қызғылт сары толық фон болмайды.
+    */
+    .sidebar nav > a.active,
+    .sidebar .side-menu > a.active,
+    .sidebar nav > a.key-selected,
+    .sidebar .side-menu > a.key-selected {
+        color: #f4c96e !important;
+
+        background: rgba(255,255,255,0.12) !important;
+
+        border-left-color: #efbd61 !important;
+
+        transform: none !important;
+        box-shadow: none !important;
+
+        font-weight: 600 !important;
+    }
+
+    /*
+       Басып тұрған сәтте де батырма орнынан қозғалмайды.
+    */
+    .sidebar nav > a:active,
+    .sidebar .side-menu > a:active,
+    .sidebar nav > a.key-pressing,
+    .sidebar .side-menu > a.key-pressing {
+        color: #ffffff !important;
+        background: rgba(255,255,255,0.16) !important;
+        border-left-color: #ffe0a0 !important;
+
+        transform: none !important;
+        box-shadow:
+            inset 0 2px 5px rgba(0,0,0,0.22) !important;
+    }
+
+    /*
+       Бұрынғы алтын ::before белгісін өшіру.
+    */
+    .sidebar nav > a::before,
+    .sidebar .side-menu > a::before {
+        display: none !important;
+        content: none !important;
+    }
+
+    /*
+       Белгіше орны да тұрақты.
+    */
+    .sidebar nav > a .menu-icon,
+    .sidebar .side-menu > a .menu-icon {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 0 0 24px !important;
+
+        width: 24px !important;
+        min-width: 24px !important;
+        max-width: 24px !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /*
+       Режим ауыстыру батырмасы тұрақты көк түсте.
+    */
+    .sidebar a.mode-switch-link,
+    .sidebar a.mode-switch-link:hover,
+    .sidebar a.mode-switch-link:active,
+    .sidebar a.mode-switch-link.active,
+    .sidebar a.mode-switch-link.key-selected {
+        color: #c6e8fa !important;
+        background: rgba(50,145,198,0.12) !important;
+        border-left-color: #55acd8 !important;
+
+        transform: none !important;
+        transition: none !important;
+        animation: none !important;
+        box-shadow: none !important;
+    }
+</style>
+<!-- STATIC ACTIVE MENU END -->
+
+</head>
+
+<body>
+<aside class="sidebar syrmura-global-sidebar">
+<div class="brand">
+<div class="brand-icon">S</div>
+<div>
+<h2>SyrMura <span>AI</span></h2>
+<p>Қызылорда облысының<br/>цифрлық архиві</p>
+</div>
+</div>
+<nav class="side-menu">
+<a class="active" href="/">
+<span class="menu-icon">🏠</span>
+<span>Басты бет</span>
+</a>
+<a class="main-section-link" href="/archive">
+<span class="menu-icon">🗂️</span>
+<span>Цифрлық архив</span>
+</a>
+<a class="main-section-link" href="/smart-search">
+<span class="menu-icon">🔎</span>
+<span>Ақылды іздеу</span>
+</a>
+<a href="/timeline">
+<span class="menu-icon">🕒</span>
+<span>Уақыт желісі</span>
+</a>
+<a href="/archive-map">
+<span class="menu-icon">🗺️</span>
+<span>Архив картасы</span>
+</a>
+<a class="main-section-link" href="/ai-lab">
+<span class="menu-icon">🧪</span>
+<span>ЖИ зертхана</span>
+</a>
+<a href="/virtual-exhibition">
+<span class="menu-icon">🏛️</span>
+<span>Виртуалды көрме</span>
+</a>
+<a href="/qr-gallery">
+<span class="menu-icon">▦</span>
+<span>QR-кодтар</span>
+</a>
+<!-- SYRMURA_OCR_MENU_START -->
+<!-- SYRMURA_OCR_MENU_END -->
+<!-- SYRMURA_QUALITY_MENU_START -->
+<!-- SYRMURA_QUALITY_MENU_END -->
+
+<!-- USER TO ADMIN MODE START -->
+{% if
+    session.get("user_role") == "admin"
+    or session.get("is_admin")
+    or session.get("admin_logged_in")
+%}
+    <div class="mode-switch-divider"></div>
+
+    <a href="/admin"
+       class="mode-switch-link admin-mode-link">
+        <span class="menu-icon">🔐</span>
+        <span>Әкімші режиміне өту</span>
+    </a>
+{% endif %}
+<!-- USER TO ADMIN MODE END -->
+
+</nav>
+<div class="sidebar-bottom">
+<a class="admin-link" href="/admin/login">🔐 Әкімшіге кіру</a>
+<p>© 2026 SyrMura AI</p>
+</div>
+</aside>
+
+<header class="topbar">
+    <div class="brand">
+        <div class="brand-logo">S</div>
+        <h1>SyrMura <span>AI</span></h1>
+    </div>
+
+    <nav class="navigation">
+        <a href="/">Басты бет</a>
+        
+        <a href="/virtual-exhibition">Виртуалды көрме</a>
+        <a href="/archive-map">Архив картасы</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h2>Архив материалдарының QR-кодтары</h2>
+
+    <p>
+        QR-кодты телефон камерасымен сканерлеп,
+        жарияланған архив материалын тікелей ашыңыз.
+        QR-кодты музейде, мектепте және тарихи нысанның
+        жанында пайдалануға болады.
+    </p>
+</section>
+
+<div class="notice">
+    QR-код жұмыс істеуі үшін SyrMura AI сервері қосулы және
+    интернетке қолжетімді болуы керек. Colab сессиясы тоқтағанда
+    уақытша сілтеме де жұмысын тоқтатады.
+</div>
+
+<main class="gallery">
+    {% if documents %}
+
+        {% for doc in documents %}
+        <article class="qr-card">
+            <div class="qr-preview">
+                <img
+                    src="{{ url_for(
+                        'document_qr_code',
+                        document_id=doc.id
+                    ) }}"
+                    alt="{{ doc.title }} QR-коды"
+                >
+            </div>
+
+            <div class="qr-info">
+                <div class="qr-meta">
+                    <span>
+                        {{ doc.subsection or "Мұрағат" }}
+                    </span>
+
+                    <span>
+                        {{ doc.document_year or "Жылы белгісіз" }}
+                    </span>
+                </div>
+
+                <h3>{{ doc.title }}</h3>
+
+                <p>
+                    {{ doc.location_name or
+                       "Орналасқан жері көрсетілмеген" }}
+                </p>
+
+                <div class="actions">
+                    <a
+                        class="view-button"
+                        href="{{ url_for(
+                            'public_document_file',
+                            document_id=doc.id
+                        ) }}"
+                        target="_blank"
+                    >
+                        Материалды ашу
+                    </a>
+
+                    <a
+                        class="download-button"
+                        href="{{ url_for(
+                            'document_qr_code',
+                            document_id=doc.id,
+                            download=1
+                        ) }}"
+                    >
+                        QR жүктеу
+                    </a>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+
+    {% else %}
+        <div class="empty">
+            <h2>QR-код жасайтын материал жоқ</h2>
+            <p>
+                Әкімші материалдарды жариялағаннан кейін
+                QR-кодтар автоматты жасалады.
+            </p>
+        </div>
+    {% endif %}
+</main>
+
+<footer class="footer">
+    SyrMura AI — Қызылорда облысының цифрлық архиві
+</footer>
+
+<!-- SYRMURA BACK BUTTON START -->
+<style>
+    .syrmura-back-button {
+        position: fixed !important;
+        top: 16px !important;
+        right: 22px !important;
+        z-index: 99998 !important;
+
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 7px !important;
+
+        min-height: 40px !important;
+        padding: 9px 16px !important;
+
+        color: #173753 !important;
+        background: rgba(255,255,255,0.96) !important;
+        border: 1px solid #d5a94e !important;
+        border-radius: 9px !important;
+
+        box-shadow: 0 5px 16px
+            rgba(7,29,54,0.14) !important;
+
+        font-family: Arial, sans-serif !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        line-height: 1 !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+
+        transition:
+            background 0.2s ease,
+            color 0.2s ease,
+            transform 0.2s ease !important;
+    }
+
+    .syrmura-back-button:hover {
+        color: #ffffff !important;
+        background: #c79334 !important;
+        transform: translateY(-1px) !important;
+    }
+
+    .syrmura-back-arrow {
+        font-size: 19px !important;
+        line-height: 1 !important;
+    }
+
+    @media (max-width: 700px) {
+        .syrmura-back-button {
+            top: 10px !important;
+            right: 10px !important;
+            min-height: 37px !important;
+            padding: 8px 11px !important;
+            font-size: 12px !important;
+        }
+    }
+</style>
+
+<button
+    type="button"
+    class="syrmura-back-button"
+    aria-label="Алдыңғы бетке қайту"
+    onclick="
+        if (
+            document.referrer &&
+            window.history.length > 1
+        ) {
+            window.history.back();
+        } else {
+            window.location.href = '/';
+        }
+    "
+>
+    <span class="syrmura-back-arrow">←</span>
+    <span>Кері қайту</span>
+</button>
+<!-- SYRMURA BACK BUTTON END -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- STATIC ACTIVE MENU SCRIPT START -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const links = Array.from(
+        document.querySelectorAll(
+            ".sidebar nav a, .sidebar .side-menu a"
+        )
+    );
+
+    const currentPath = (
+        window.location.pathname.replace(/\/+$/, "")
+        || "/"
+    );
+
+    /*
+       Бұрын localStorage ішінде сақталған ауыспалы
+       қызғылт сары батырманы тазалау.
+    */
+    try {
+        localStorage.removeItem(
+            "syrmura_admin_selected_key"
+        );
+
+        localStorage.removeItem(
+            "syrmura_public_selected_key"
+        );
+    } catch (error) {
+        // localStorage жабық болса, өткізіледі
+    }
+
+    links.forEach(function (link) {
+        link.classList.remove(
+            "active",
+            "key-selected",
+            "key-pressing",
+            "menu-pressed"
+        );
+
+        link.removeAttribute("aria-current");
+    });
+
+    function pathOf(link) {
+        try {
+            return (
+                new URL(
+                    link.href,
+                    window.location.origin
+                ).pathname.replace(/\/+$/, "")
+                || "/"
+            );
+        } catch (error) {
+            return "";
+        }
+    }
+
+    let selectedLink = null;
+    let bestLength = -1;
+
+    links.forEach(function (link) {
+        const linkPath = pathOf(link);
+
+        const exactMatch =
+            linkPath === currentPath;
+
+        const childMatch =
+            linkPath !== "/"
+            && currentPath.startsWith(linkPath + "/");
+
+        if (
+            (exactMatch || childMatch)
+            && linkPath.length > bestLength
+        ) {
+            selectedLink = link;
+            bestLength = linkPath.length;
+        }
+    });
+
+    if (selectedLink) {
+        selectedLink.classList.add("active");
+        selectedLink.setAttribute(
+            "aria-current",
+            "page"
+        );
+    }
+
+    /*
+       Басылған сәтте қысқа ішкі көлеңке ғана көрсетіледі.
+       Класс жаңа бет ашылар алдында жойылады.
+    */
+    links.forEach(function (link) {
+        link.addEventListener(
+            "pointerdown",
+            function () {
+                link.classList.add("key-pressing");
+            }
+        );
+
+        link.addEventListener(
+            "pointerup",
+            function () {
+                link.classList.remove("key-pressing");
+            }
+        );
+
+        link.addEventListener(
+            "pointerleave",
+            function () {
+                link.classList.remove("key-pressing");
+            }
+        );
+    });
+});
+</script>
+<!-- STATIC ACTIVE MENU SCRIPT END -->
+
+</body>
+</html>

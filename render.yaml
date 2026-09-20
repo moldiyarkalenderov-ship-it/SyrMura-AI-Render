@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: syrmura-ai
+    runtime: docker
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+

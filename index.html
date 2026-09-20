@@ -1,0 +1,1341 @@
+
+<!DOCTYPE html>
+
+<html lang="kk">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SyrMura AI — Қызылорда облысының цифрлық архиві</title>
+<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet"/>
+<!-- SYRMURA_OCR_MENU_STYLE_START -->
+<style>
+    .ocr-menu-link {
+        margin-left: 18px !important;
+        width: calc(100% - 18px) !important;
+        border-left: 2px solid #d8ad58 !important;
+        border-radius: 5px 10px 10px 5px !important;
+        color: #dce8f4 !important;
+        background: rgba(255,255,255,.04) !important;
+        font-size: 14px !important;
+    }
+
+    .ocr-menu-link:hover {
+        color: #efc877 !important;
+        background: rgba(255,255,255,.12) !important;
+    }
+</style>
+<!-- SYRMURA_OCR_MENU_STYLE_END -->
+
+<!-- MAIN SECTION LINKS STYLE START -->
+<style>
+.sidebar .main-section-link,
+.syrmura-global-sidebar .main-section-link,
+.persistent-public-sidebar .main-section-link {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+    min-height: 48px !important;
+    padding: 11px 13px !important;
+    margin: 0 0 5px 0 !important;
+    color: #edf5ff !important;
+    background: transparent !important;
+    border-left: 3px solid transparent !important;
+    border-radius: 10px !important;
+    text-decoration: none !important;
+    font-size: 15px !important;
+    line-height: 1.3 !important;
+    cursor: pointer !important;
+}
+
+.sidebar .main-section-link:hover,
+.syrmura-global-sidebar .main-section-link:hover,
+.persistent-public-sidebar .main-section-link:hover {
+    color: #efbd61 !important;
+    background: rgba(255,255,255,0.10) !important;
+}
+
+.sidebar .main-section-link.active,
+.syrmura-global-sidebar .main-section-link.active,
+.persistent-public-sidebar .main-section-link.active {
+    color: #efbd61 !important;
+    background: rgba(255,255,255,0.14) !important;
+    border-left-color: #efbd61 !important;
+}
+
+.sidebar .main-section-link .menu-icon,
+.syrmura-global-sidebar .main-section-link .menu-icon,
+.persistent-public-sidebar .main-section-link .menu-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 24px !important;
+    min-width: 24px !important;
+}
+
+/* Ескі бөлімшелерді толық жасыру */
+.sidebar .submenu,
+.syrmura-global-sidebar .submenu,
+.persistent-public-sidebar .submenu {
+    display: none !important;
+}
+</style>
+<!-- MAIN SECTION LINKS STYLE END -->
+
+
+<!-- MODE SWITCH STYLE START -->
+<style>
+    .sidebar .mode-switch-divider {
+        flex: 0 0 auto !important;
+        width: calc(100% - 16px) !important;
+        height: 1px !important;
+        margin: 15px 8px 9px !important;
+        background: rgba(255,255,255,0.17) !important;
+    }
+
+    .sidebar .mode-switch-link {
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 11px !important;
+
+        width: 100% !important;
+        min-height: 48px !important;
+        padding: 10px 12px !important;
+        margin: 0 !important;
+
+        color: #f5d792 !important;
+        background: rgba(239,189,97,0.09) !important;
+
+        border: 1px solid rgba(239,189,97,0.25) !important;
+        border-left: 3px solid #efbd61 !important;
+        border-radius: 9px !important;
+
+        text-decoration: none !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        line-height: 1.25 !important;
+
+        box-sizing: border-box !important;
+        transition:
+            background 0.12s ease,
+            color 0.12s ease,
+            transform 0.08s ease,
+            box-shadow 0.08s ease !important;
+    }
+
+    .sidebar .mode-switch-link:hover {
+        color: #ffffff !important;
+        background: rgba(239,189,97,0.20) !important;
+    }
+
+    .sidebar .mode-switch-link:active {
+        color: #ffffff !important;
+        background: #b68129 !important;
+        transform: translateY(3px) !important;
+        box-shadow:
+            inset 0 3px 7px rgba(0,0,0,0.30) !important;
+    }
+
+    .sidebar .mode-switch-link .menu-icon {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 24px !important;
+        min-width: 24px !important;
+    }
+
+    .sidebar .admin-mode-link {
+        color: #ffd98b !important;
+        background: rgba(210,145,32,0.13) !important;
+    }
+
+    .sidebar .user-mode-link {
+        color: #bfe3fa !important;
+        background: rgba(61,154,207,0.12) !important;
+        border-color: rgba(89,184,231,0.30) !important;
+        border-left-color: #5db8e5 !important;
+    }
+
+    .sidebar .user-mode-link:hover {
+        background: rgba(61,154,207,0.24) !important;
+    }
+</style>
+<!-- MODE SWITCH STYLE END -->
+
+
+<!-- PERSISTENT KEY STYLE START -->
+<style>
+    /*
+       Барлық мәзір батырмасының негізгі өлшемі.
+       Таңдалған кезде көрші батырмалар қозғалмайды.
+    */
+    .sidebar nav a,
+    .sidebar .side-menu a {
+        position: relative !important;
+        box-sizing: border-box !important;
+
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        min-height: 48px !important;
+
+        margin: 0 !important;
+        padding: 10px 12px !important;
+
+        border: 1px solid transparent !important;
+        border-left: 3px solid transparent !important;
+        border-radius: 9px !important;
+
+        transform: translateY(0) !important;
+
+        transition:
+            color 0.12s ease,
+            background-color 0.12s ease,
+            border-color 0.12s ease,
+            box-shadow 0.10s ease,
+            transform 0.08s ease !important;
+    }
+
+    /*
+       Басылып таңдалған және сол күйде сақталатын батырма
+    */
+    .sidebar nav a.key-selected,
+    .sidebar .side-menu a.key-selected,
+    .sidebar nav a.active,
+    .sidebar .side-menu a.active {
+        color: #ffffff !important;
+        background:
+            linear-gradient(
+                180deg,
+                #bd8932 0%,
+                #95651f 100%
+            ) !important;
+
+        border-color: #d7a84f !important;
+        border-left-color: #ffe2a0 !important;
+
+        /*
+           Батырма перне сияқты ішке басылып тұрады.
+           Transform басқа батырмалардың орнын өзгертпейді.
+        */
+        transform: translateY(2px) !important;
+
+        box-shadow:
+            inset 0 4px 8px rgba(0,0,0,0.33),
+            inset 0 -1px 1px rgba(255,255,255,0.12),
+            0 1px 0 rgba(255,255,255,0.10) !important;
+
+        font-weight: 700 !important;
+    }
+
+    /*
+       Таңдалған перненің сол жағындағы жарық белгі
+    */
+    .sidebar nav a.key-selected::before,
+    .sidebar .side-menu a.key-selected::before,
+    .sidebar nav a.active::before,
+    .sidebar .side-menu a.active::before {
+        content: "" !important;
+        position: absolute !important;
+        left: -3px !important;
+        top: 8px !important;
+        bottom: 8px !important;
+        width: 3px !important;
+
+        background: #ffe09a !important;
+        border-radius: 0 4px 4px 0 !important;
+        box-shadow: 0 0 8px rgba(255,216,128,0.65) !important;
+    }
+
+    /*
+       Тінтуір дәл басылып тұрған сәттегі терең әсер
+    */
+    .sidebar nav a:active,
+    .sidebar .side-menu a:active,
+    .sidebar nav a.key-pressing,
+    .sidebar .side-menu a.key-pressing {
+        color: #ffffff !important;
+        background: #7f5318 !important;
+        border-color: #69400f !important;
+        border-left-color: #fff0be !important;
+
+        transform: translateY(4px) !important;
+
+        box-shadow:
+            inset 0 6px 10px rgba(0,0,0,0.43),
+            0 0 0 1px rgba(255,255,255,0.04) !important;
+    }
+
+    .sidebar nav a.key-selected .menu-icon,
+    .sidebar .side-menu a.key-selected .menu-icon,
+    .sidebar nav a.active .menu-icon,
+    .sidebar .side-menu a.active .menu-icon {
+        filter:
+            brightness(1.15)
+            drop-shadow(0 1px 1px rgba(0,0,0,0.25));
+    }
+
+    /*
+       Режим ауыстыру батырмалары да дәл солай белгіленеді
+    */
+    .sidebar a.mode-switch-link.key-selected {
+        color: #ffffff !important;
+        background:
+            linear-gradient(
+                180deg,
+                #258abb,
+                #176386
+            ) !important;
+
+        border-color: #63bce5 !important;
+        border-left-color: #c7edff !important;
+
+        box-shadow:
+            inset 0 4px 8px rgba(0,0,0,0.30),
+            0 1px 0 rgba(255,255,255,0.10) !important;
+    }
+
+    .sidebar nav a:focus-visible,
+    .sidebar .side-menu a:focus-visible {
+        outline: 2px solid #ffe09a !important;
+        outline-offset: 2px !important;
+    }
+</style>
+<!-- PERSISTENT KEY STYLE END -->
+
+
+<!-- ZERO MOVEMENT MENU FIX START -->
+<style>
+    /*
+       Мәзірдің барлық батырмасы бірдей тұрақты өлшемде.
+    */
+    .sidebar nav,
+    .sidebar .side-menu {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 5px !important;
+        width: 100% !important;
+    }
+
+    .sidebar nav > a,
+    .sidebar .side-menu > a,
+    .sidebar nav > a:hover,
+    .sidebar .side-menu > a:hover,
+    .sidebar nav > a:active,
+    .sidebar .side-menu > a:active,
+    .sidebar nav > a.active,
+    .sidebar .side-menu > a.active,
+    .sidebar nav > a.key-selected,
+    .sidebar .side-menu > a.key-selected,
+    .sidebar nav > a.key-pressing,
+    .sidebar .side-menu > a.key-pressing {
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        flex: 0 0 48px !important;
+        gap: 11px !important;
+
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+
+        height: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+
+        padding: 10px 12px !important;
+        margin: 0 !important;
+
+        border-width: 1px 1px 1px 3px !important;
+        border-style: solid !important;
+        border-radius: 9px !important;
+
+        box-sizing: border-box !important;
+
+        /*
+           Ешқандай бағытта қозғалмайды.
+        */
+        transform: none !important;
+        translate: none !important;
+        scale: 1 !important;
+
+        line-height: 1.25 !important;
+        text-decoration: none !important;
+    }
+
+    /*
+       Қалыпты батырма
+    */
+    .sidebar nav > a,
+    .sidebar .side-menu > a {
+        color: #eaf3fc !important;
+        background: transparent !important;
+        border-color: transparent !important;
+    }
+
+    /*
+       Тінтуірді апарғандағы әсер.
+       Өлшемі мен орны өзгермейді.
+    */
+    .sidebar nav > a:hover,
+    .sidebar .side-menu > a:hover {
+        color: #efbd61 !important;
+        background: rgba(255,255,255,0.09) !important;
+        border-color:
+            rgba(239,189,97,0.22)
+            rgba(239,189,97,0.22)
+            rgba(239,189,97,0.22)
+            #efbd61 !important;
+
+        transform: none !important;
+    }
+
+    /*
+       Таңдалған батырма.
+       Перне басылғандай көрінеді, бірақ қозғалмайды.
+    */
+    .sidebar nav > a.active,
+    .sidebar .side-menu > a.active,
+    .sidebar nav > a.key-selected,
+    .sidebar .side-menu > a.key-selected {
+        color: #ffffff !important;
+
+        background:
+            linear-gradient(
+                180deg,
+                #b9822c 0%,
+                #91601c 100%
+            ) !important;
+
+        border-color:
+            #d8a74d
+            #d8a74d
+            #70450e
+            #ffe09a !important;
+
+        transform: none !important;
+
+        box-shadow:
+            inset 0 4px 8px rgba(0,0,0,0.34),
+            inset 0 -1px 1px rgba(255,255,255,0.10),
+            0 0 0 1px rgba(255,224,154,0.05) !important;
+
+        font-weight: 700 !important;
+    }
+
+    /*
+       Тінтуір нақты басылып тұрған қысқа сәт.
+       Бұл кезде де қозғалыс болмайды.
+    */
+    .sidebar nav > a:active,
+    .sidebar .side-menu > a:active,
+    .sidebar nav > a.key-pressing,
+    .sidebar .side-menu > a.key-pressing {
+        color: #ffffff !important;
+        background: #75470f !important;
+
+        border-color:
+            #5b3308
+            #5b3308
+            #452400
+            #fff0bd !important;
+
+        transform: none !important;
+
+        box-shadow:
+            inset 0 6px 11px rgba(0,0,0,0.48) !important;
+    }
+
+    /*
+       Бұрынғы ::before белгісі де өлшемге әсер етпейді.
+    */
+    .sidebar nav > a::before,
+    .sidebar .side-menu > a::before {
+        box-sizing: border-box !important;
+        pointer-events: none !important;
+    }
+
+    /*
+       Белгіше мен мәтін орны тұрақты.
+    */
+    .sidebar nav > a .menu-icon,
+    .sidebar .side-menu > a .menu-icon {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 0 0 24px !important;
+
+        width: 24px !important;
+        min-width: 24px !important;
+        max-width: 24px !important;
+
+        height: 24px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .sidebar nav > a span:last-child,
+    .sidebar .side-menu > a span:last-child {
+        flex: 1 1 auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /*
+       Режим ауыстыру батырмалары да қозғалмайды.
+    */
+    .sidebar a.mode-switch-link,
+    .sidebar a.mode-switch-link:hover,
+    .sidebar a.mode-switch-link:active,
+    .sidebar a.mode-switch-link.key-selected {
+        height: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+        padding: 10px 12px !important;
+        margin: 0 !important;
+        transform: none !important;
+    }
+</style>
+<!-- ZERO MOVEMENT MENU FIX END -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- STATIC ACTIVE MENU START -->
+<style>
+    /*
+       Барлық әкімші батырмасы тұрақты қалыпта болады.
+    */
+    .sidebar nav > a,
+    .sidebar .side-menu > a,
+    .sidebar nav > a:hover,
+    .sidebar .side-menu > a:hover,
+    .sidebar nav > a:active,
+    .sidebar .side-menu > a:active,
+    .sidebar nav > a.active,
+    .sidebar .side-menu > a.active,
+    .sidebar nav > a.key-selected,
+    .sidebar .side-menu > a.key-selected,
+    .sidebar nav > a.key-pressing,
+    .sidebar .side-menu > a.key-pressing {
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        flex: 0 0 46px !important;
+        gap: 10px !important;
+
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+
+        height: 46px !important;
+        min-height: 46px !important;
+        max-height: 46px !important;
+
+        padding: 9px 11px !important;
+        margin: 0 !important;
+
+        border-width: 0 0 0 3px !important;
+        border-style: solid !important;
+        border-color: transparent !important;
+        border-radius: 8px !important;
+
+        box-sizing: border-box !important;
+
+        /*
+           Ешқандай секіру, жылжу және анимация болмайды.
+        */
+        transform: none !important;
+        translate: none !important;
+        scale: 1 !important;
+        transition: none !important;
+        animation: none !important;
+
+        box-shadow: none !important;
+        text-decoration: none !important;
+    }
+
+    /*
+       Қалыпты батырма.
+    */
+    .sidebar nav > a,
+    .sidebar .side-menu > a {
+        color: #edf4fb !important;
+        background: transparent !important;
+        border-left-color: transparent !important;
+        font-weight: 400 !important;
+    }
+
+    /*
+       Тінтуірді апарғанда ғана жеңіл фон.
+    */
+    .sidebar nav > a:hover,
+    .sidebar .side-menu > a:hover {
+        color: #f2c66e !important;
+        background: rgba(255,255,255,0.07) !important;
+        border-left-color: rgba(242,198,110,0.45) !important;
+
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    /*
+       Ашық тұрған бөлім:
+       қызғылт сары толық фон болмайды.
+    */
+    .sidebar nav > a.active,
+    .sidebar .side-menu > a.active,
+    .sidebar nav > a.key-selected,
+    .sidebar .side-menu > a.key-selected {
+        color: #f4c96e !important;
+
+        background: rgba(255,255,255,0.12) !important;
+
+        border-left-color: #efbd61 !important;
+
+        transform: none !important;
+        box-shadow: none !important;
+
+        font-weight: 600 !important;
+    }
+
+    /*
+       Басып тұрған сәтте де батырма орнынан қозғалмайды.
+    */
+    .sidebar nav > a:active,
+    .sidebar .side-menu > a:active,
+    .sidebar nav > a.key-pressing,
+    .sidebar .side-menu > a.key-pressing {
+        color: #ffffff !important;
+        background: rgba(255,255,255,0.16) !important;
+        border-left-color: #ffe0a0 !important;
+
+        transform: none !important;
+        box-shadow:
+            inset 0 2px 5px rgba(0,0,0,0.22) !important;
+    }
+
+    /*
+       Бұрынғы алтын ::before белгісін өшіру.
+    */
+    .sidebar nav > a::before,
+    .sidebar .side-menu > a::before {
+        display: none !important;
+        content: none !important;
+    }
+
+    /*
+       Белгіше орны да тұрақты.
+    */
+    .sidebar nav > a .menu-icon,
+    .sidebar .side-menu > a .menu-icon {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 0 0 24px !important;
+
+        width: 24px !important;
+        min-width: 24px !important;
+        max-width: 24px !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /*
+       Режим ауыстыру батырмасы тұрақты көк түсте.
+    */
+    .sidebar a.mode-switch-link,
+    .sidebar a.mode-switch-link:hover,
+    .sidebar a.mode-switch-link:active,
+    .sidebar a.mode-switch-link.active,
+    .sidebar a.mode-switch-link.key-selected {
+        color: #c6e8fa !important;
+        background: rgba(50,145,198,0.12) !important;
+        border-left-color: #55acd8 !important;
+
+        transform: none !important;
+        transition: none !important;
+        animation: none !important;
+        box-shadow: none !important;
+    }
+</style>
+<!-- STATIC ACTIVE MENU END -->
+
+</head>
+<body>
+<!-- СОЛ ЖАҚ МӘЗІР -->
+<aside class="sidebar">
+<div class="brand">
+<div class="brand-icon">S</div>
+<div>
+<h2>SyrMura <span>AI</span></h2>
+<p>Қызылорда облысының<br/>цифрлық архиві</p>
+</div>
+</div>
+<nav class="side-menu">
+<a class="active" href="/">
+<span class="menu-icon">🏠</span>
+<span>Басты бет</span>
+</a>
+<a class="main-section-link" href="/archive">
+<span class="menu-icon">🗂️</span>
+<span>Цифрлық архив</span>
+</a>
+<a class="main-section-link" href="/smart-search">
+<span class="menu-icon">🔎</span>
+<span>Ақылды іздеу</span>
+</a>
+<a href="/timeline">
+<span class="menu-icon">🕒</span>
+<span>Уақыт желісі</span>
+</a>
+<a href="/archive-map">
+<span class="menu-icon">🗺️</span>
+<span>Архив картасы</span>
+</a>
+<a class="main-section-link" href="/ai-lab">
+<span class="menu-icon">🧪</span>
+<span>ЖИ зертхана</span>
+</a>
+<a href="/virtual-exhibition">
+<span class="menu-icon">🏛️</span>
+<span>Виртуалды көрме</span>
+</a>
+<a href="/qr-gallery">
+<span class="menu-icon">▦</span>
+<span>QR-кодтар</span>
+</a>
+<!-- SYRMURA_OCR_MENU_START -->
+<!-- SYRMURA_OCR_MENU_END -->
+<!-- SYRMURA_QUALITY_MENU_START -->
+<!-- SYRMURA_QUALITY_MENU_END -->
+
+<!-- USER TO ADMIN MODE START -->
+{% if
+    session.get("user_role") == "admin"
+    or session.get("is_admin")
+    or session.get("admin_logged_in")
+%}
+    <div class="mode-switch-divider"></div>
+
+    <a href="/admin"
+       class="mode-switch-link admin-mode-link">
+        <span class="menu-icon">🔐</span>
+        <span>Әкімші режиміне өту</span>
+    </a>
+{% endif %}
+<!-- USER TO ADMIN MODE END -->
+
+</nav>
+<div class="sidebar-bottom">
+<a class="admin-link" href="/admin/login">🔐 Әкімшіге кіру</a>
+<p>© 2026 SyrMura AI</p>
+</div>
+</aside>
+<!-- НЕГІЗГІ БӨЛІК -->
+<main class="main-content">
+<!-- ЖОҒАРҒЫ МӘЗІР -->
+<header class="top-header">
+<div class="mobile-logo">SyrMura AI Bot</div>
+<nav class="top-menu">
+<a class="active" href="#">Басты бет</a>
+
+<a href="#">Коллекциялар</a>
+<a href="#">Қолданбалы AI</a>
+<a href="#">Іздеу</a>
+</nav>
+<div class="auth-buttons">
+<button class="register-button">Тіркелу</button>
+<button class="login-button">Кіру</button>
+</div>
+</header>
+<!-- БАСТЫ БАННЕР -->
+<section class="hero">
+<div class="hero-overlay"></div>
+<div class="hero-content">
+<div class="hero-label">1818 ЖЫЛДАН БҮГІНГЕ ДЕЙІН</div>
+<h1>
+<span>SyrMura AI:</span> Қызылорда облысының<br/>
+                цифрлық архиві
+            </h1>
+<p class="hero-description">
+                Тарихи құжаттар, фотосуреттер, карталар мен сирек архив
+                материалдарын бір жерден зерттеңіз.
+            </p>
+<form class="search-box">
+<input placeholder="Іздеу: Қызылорда тарихы, тұлғалар, оқиғалар..." type="text"/>
+<button title="Іздеу" type="submit">⌕</button>
+</form>
+<div class="material-types">
+<a href="#">
+<span class="type-icon">📄</span>
+<span>Мәтіндер</span>
+</a>
+<a href="#">
+<span class="type-icon">🖼️</span>
+<span>Фотолар</span>
+</a>
+<a href="#">
+<span class="type-icon">🎥</span>
+<span>Видеолар</span>
+</a>
+<a href="#">
+<span class="type-icon">🗺️</span>
+<span>Карталар</span>
+</a>
+</div>
+</div>
+</section>
+<!-- СТАТИСТИКА -->
+<section class="statistics">
+<div class="stat-card">
+<strong>1 284</strong>
+<span>Архивтік құжат</span>
+</div>
+<div class="stat-card">
+<strong>642</strong>
+<span>Тарихи фотосурет</span>
+</div>
+<div class="stat-card">
+<strong>87</strong>
+<span>Цифрлық коллекция</span>
+</div>
+<div class="stat-card">
+<strong>192</strong>
+<span>Тарихи тұлға</span>
+</div>
+</section>
+<!-- ЖАҢАЛЫҚТАР -->
+<section class="content-section">
+<div class="section-heading">
+<div>
+<span class="small-title">АРХИВ ЖАҢАЛЫҚТАРЫ</span>
+<h2>Жаңалықтар мен оқиғалар</h2>
+</div>
+<a href="#">Барлығын көру →</a>
+</div>
+<div class="card-grid">
+<article class="archive-card">
+<div class="card-image old-document">
+<span>📜</span>
+</div>
+<div class="card-body">
+<span class="card-category">ҚҰЖАТ</span>
+<h3>Алаш Орда құжаттары</h3>
+<p>Қызылорда өңіріне қатысты тарихи құжаттар жинағы.</p>
+<div class="card-footer">
+<span>1917 жыл</span>
+<button>Қарау</button>
+</div>
+</div>
+</article>
+<article class="archive-card">
+<div class="card-image old-photo">
+<span>📷</span>
+</div>
+<div class="card-body">
+<span class="card-category">ФОТОСУРЕТ</span>
+<h3>Қызылорданың көне көрінісі</h3>
+<p>Қаланың тарихи ғимараттары мен орталық көшелері.</p>
+<div class="card-footer">
+<span>1925 жыл</span>
+<button>Қарау</button>
+</div>
+</div>
+</article>
+<article class="archive-card">
+<div class="card-image old-map">
+<span>🗺️</span>
+</div>
+<div class="card-body">
+<span class="card-category">КАРТА</span>
+<h3>Сыр өңірінің тарихи картасы</h3>
+<p>Ескі елді мекендер мен тарихи жер атаулары.</p>
+<div class="card-footer">
+<span>1950 жыл</span>
+<button>Қарау</button>
+</div>
+</div>
+</article>
+</div>
+</section>
+<!-- КОЛЛЕКЦИЯЛАР -->
+<section class="collections-section">
+<div class="section-heading">
+<div>
+<span class="small-title">ТАҢДАУЛЫ МАТЕРИАЛДАР</span>
+<h2>Танымал коллекциялар</h2>
+</div>
+<a href="#">Барлығын көру →</a>
+</div>
+<div class="collection-grid">
+<div class="collection-card">
+<div class="collection-icon">🏙️</div>
+<h3>Ақмешіттен Қызылордаға дейін</h3>
+<p>Қаланың қалыптасуы мен тарихи дамуы</p>
+</div>
+<div class="collection-card">
+<div class="collection-icon">🚂</div>
+<h3>Перовск теміржолы</h3>
+<p>Вокзал, теміржол және тарихи фотосуреттер</p>
+</div>
+<div class="collection-card">
+<div class="collection-icon">👥</div>
+<h3>Сыр бойы тұлғалары</h3>
+<p>Ақындар, қайраткерлер және зерттеушілер</p>
+</div>
+<div class="collection-card">
+<div class="collection-icon">🚀</div>
+<h3>Байқоңыр тарихы</h3>
+<p>Ғарыш айлағына қатысты архив материалдары</p>
+</div>
+</div>
+</section>
+<!-- ARCHIVE_GALLERY_START -->
+<section class="archive-gallery-section">
+<div class="section-heading">
+<div>
+<span class="small-title">ТАРИХИ МҰРА</span>
+<h2>Архив материалдары</h2>
+</div>
+<a href="#">Барлығын көру →</a>
+</div>
+<p class="gallery-description">
+        Қызылорда облысының тарихына қатысты құжаттар,
+        фотосуреттер, карталар және басқа архив материалдары.
+    </p>
+<div class="archive-source-gallery" id="archive-source-gallery">
+<div class="gallery-loading">
+            Архив материалдары жүктелуде...
+        </div>
+</div>
+</section>
+<!-- ARCHIVE_GALLERY_END -->
+</main>
+<!-- SYRMURA AI BOT -->
+<section class="chatbot">
+<header class="chatbot-header">
+<div class="bot-logo">S</div>
+<div>
+<strong>SyrMura AI Bot</strong>
+<span>ЖИ архивші</span>
+</div>
+<button class="close-chat">×</button>
+</header>
+<div class="chatbot-body">
+<div class="bot-message">
+            Сәлем! Мен Қызылорда облысының цифрлық архиві бойынша
+            қажетті деректі табуға көмектесемін.
+        </div>
+<div class="bot-suggestions">
+<button>Құжатты қалай табамын?</button>
+<button>Қызылорда тарихын көрсету</button>
+</div>
+</div>
+<form class="chatbot-input">
+<input placeholder="Сұрағыңызды жазыңыз..." type="text"/>
+<button type="submit">➤</button>
+</form>
+</section>
+<!-- ARCHIVE_GALLERY_SCRIPT_START -->
+<script>
+document.addEventListener("DOMContentLoaded", async function () {
+    const gallery = document.getElementById(
+        "archive-source-gallery"
+    );
+
+    const imageOrder = [
+        "railway.jpg",
+        "syrdarya_map_detail.jpg",
+        "alas.jpg",
+        "kyzylorda_old.jpg",
+        "baikonur_people.jpg",
+        "baikonur.jpg",
+        "syrdarya_map.jpg",
+        "akmeshit_fortress.jpg"
+    ];
+
+    try {
+        const response = await fetch(
+            "/static/data/image_sources.json"
+        );
+
+        if (!response.ok) {
+            throw new Error("Дереккөз файлы табылмады");
+        }
+
+        const imageSources = await response.json();
+
+        gallery.innerHTML = "";
+
+        imageOrder.forEach(function (fileName) {
+            const info = imageSources[fileName];
+
+            if (!info) {
+                return;
+            }
+
+            const card = document.createElement("article");
+            card.className = "source-gallery-card";
+
+            card.innerHTML = `
+                <div class="source-image-wrapper">
+                    <img
+                        src="/static/images/${fileName}"
+                        alt="${info.title}"
+                        class="source-gallery-image"
+                        loading="lazy"
+                    >
+
+                    <span class="archive-badge">
+                        Архив материалы
+                    </span>
+                </div>
+
+                <div class="source-gallery-content">
+                    <h3>${info.title}</h3>
+
+                    <p class="source-description">
+                        ${info.description}
+                    </p>
+
+                    <div class="source-information">
+                        <div>
+                            <span class="source-label">
+                                Дереккөз:
+                            </span>
+
+                            <a
+                                href="${info.source_url}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                ${info.source_name} ↗
+                            </a>
+                        </div>
+
+                        <div class="license-information">
+                            <span class="source-label">
+                                Пайдалану:
+                            </span>
+
+                            <span>${info.license}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            gallery.appendChild(card);
+        });
+
+    } catch (error) {
+        gallery.innerHTML = `
+            <div class="gallery-error">
+                Архив суреттерін жүктеу кезінде қате шықты:
+                ${error.message}
+            </div>
+        `;
+    }
+});
+</script>
+<!-- ARCHIVE_GALLERY_SCRIPT_END -->
+<script id="archive-link-fix">
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("a").forEach(function (link) {
+        const text = link.textContent.trim();
+
+        if (text === "Мұрағат") {
+            link.href = "/archive";
+        }
+    });
+});
+</script>
+<script id="sidebar-archive-fix">
+document.addEventListener("DOMContentLoaded", function () {
+
+    document.querySelectorAll("a").forEach(function (link) {
+
+        const linkText = link.textContent.trim();
+
+        // Сол жақтағы «Цифрлық архив» атауын өзгерту
+        if (linkText.includes("Цифрлық архив")) {
+
+            link.href = "/archive";
+
+            const textSpans = link.querySelectorAll("span");
+
+            if (textSpans.length > 0) {
+                textSpans[textSpans.length - 1].textContent =
+                    "Мұрағат";
+            } else {
+                link.innerHTML = "📁 &nbsp; Мұрағат";
+            }
+        }
+
+        // Жоғарғы мәзірдегі «Мұрағат» сілтемесі
+        if (linkText === "Мұрағат") {
+            link.href = "/archive";
+        }
+    });
+
+});
+</script>
+<script id="move-archive-menu">
+document.addEventListener("DOMContentLoaded", function () {
+
+    const sidebar = document.querySelector(".sidebar");
+
+    if (!sidebar) {
+        return;
+    }
+
+    let aiArchivistLink = null;
+    let sidebarArchiveLink = null;
+
+    // Сол жақ мәзірдегі қажетті сілтемелерді табу
+    sidebar.querySelectorAll("a").forEach(function (link) {
+        const text = link.textContent.trim();
+
+        if (text.includes("ЖИ архивші")) {
+            aiArchivistLink = link;
+        }
+
+        if (
+            text === "Мұрағат" ||
+            text.includes("Цифрлық архив")
+        ) {
+            sidebarArchiveLink = link;
+        }
+    });
+
+    // Мұрағат сілтемесі болмаса, жаңадан құру
+    if (!sidebarArchiveLink) {
+        sidebarArchiveLink = document.createElement("a");
+        sidebarArchiveLink.href = "/archive";
+        sidebarArchiveLink.innerHTML = `
+            <span class="menu-icon">📁</span>
+            <span>Мұрағат</span>
+        `;
+    }
+
+    // Атауын және сілтемесін нақтылау
+    sidebarArchiveLink.href = "/archive";
+
+    const archiveSpans =
+        sidebarArchiveLink.querySelectorAll("span");
+
+    if (archiveSpans.length > 0) {
+        archiveSpans[
+            archiveSpans.length - 1
+        ].textContent = "Мұрағат";
+    }
+
+    // «ЖИ архивші» астына орналастыру
+    if (aiArchivistLink) {
+        aiArchivistLink.insertAdjacentElement(
+            "afterend",
+            sidebarArchiveLink
+        );
+    }
+
+    // Жоғарғы мәзірдегі Мұрағатты алып тастау
+    document.querySelectorAll("header a, .topbar a, .top-nav a")
+        .forEach(function (link) {
+
+            if (
+                !sidebar.contains(link) &&
+                link.textContent.trim() === "Мұрағат"
+            ) {
+                link.remove();
+            }
+        });
+});
+</script>
+<script id="ai-archivist-link">
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("a").forEach(function (link) {
+        if (link.textContent.trim().includes("ЖИ архивші")) {
+            link.href = "/ai-archivist";
+        }
+    });
+});
+</script>
+<script id="timeline-link-fix">
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll("a").forEach(function (link) {
+        if (link.textContent.trim().includes("Уақыт желісі")) {
+            link.href = "/timeline";
+        }
+    });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- STATIC ACTIVE MENU SCRIPT START -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const links = Array.from(
+        document.querySelectorAll(
+            ".sidebar nav a, .sidebar .side-menu a"
+        )
+    );
+
+    const currentPath = (
+        window.location.pathname.replace(/\/+$/, "")
+        || "/"
+    );
+
+    /*
+       Бұрын localStorage ішінде сақталған ауыспалы
+       қызғылт сары батырманы тазалау.
+    */
+    try {
+        localStorage.removeItem(
+            "syrmura_admin_selected_key"
+        );
+
+        localStorage.removeItem(
+            "syrmura_public_selected_key"
+        );
+    } catch (error) {
+        // localStorage жабық болса, өткізіледі
+    }
+
+    links.forEach(function (link) {
+        link.classList.remove(
+            "active",
+            "key-selected",
+            "key-pressing",
+            "menu-pressed"
+        );
+
+        link.removeAttribute("aria-current");
+    });
+
+    function pathOf(link) {
+        try {
+            return (
+                new URL(
+                    link.href,
+                    window.location.origin
+                ).pathname.replace(/\/+$/, "")
+                || "/"
+            );
+        } catch (error) {
+            return "";
+        }
+    }
+
+    let selectedLink = null;
+    let bestLength = -1;
+
+    links.forEach(function (link) {
+        const linkPath = pathOf(link);
+
+        const exactMatch =
+            linkPath === currentPath;
+
+        const childMatch =
+            linkPath !== "/"
+            && currentPath.startsWith(linkPath + "/");
+
+        if (
+            (exactMatch || childMatch)
+            && linkPath.length > bestLength
+        ) {
+            selectedLink = link;
+            bestLength = linkPath.length;
+        }
+    });
+
+    if (selectedLink) {
+        selectedLink.classList.add("active");
+        selectedLink.setAttribute(
+            "aria-current",
+            "page"
+        );
+    }
+
+    /*
+       Басылған сәтте қысқа ішкі көлеңке ғана көрсетіледі.
+       Класс жаңа бет ашылар алдында жойылады.
+    */
+    links.forEach(function (link) {
+        link.addEventListener(
+            "pointerdown",
+            function () {
+                link.classList.add("key-pressing");
+            }
+        );
+
+        link.addEventListener(
+            "pointerup",
+            function () {
+                link.classList.remove("key-pressing");
+            }
+        );
+
+        link.addEventListener(
+            "pointerleave",
+            function () {
+                link.classList.remove("key-pressing");
+            }
+        );
+    });
+});
+</script>
+<!-- STATIC ACTIVE MENU SCRIPT END -->
+
+</body>
+</html>

@@ -1,0 +1,551 @@
+
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>ЖИ архивші — SyrMura AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #10243f;
+            background: #f1f5f9;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 245px;
+            position: fixed;
+            inset: 0 auto 0 0;
+            padding: 20px 14px;
+            color: white;
+            background: linear-gradient(180deg, #102b4d, #06182e);
+            overflow-y: auto;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 0 7px 20px;
+            border-bottom: 1px solid rgba(255,255,255,.12);
+        }
+
+        .logo {
+            width: 43px;
+            height: 43px;
+            display: grid;
+            place-items: center;
+            border: 2px solid #dcb15d;
+            border-radius: 50%;
+            color: #ecc574;
+            font-family: Georgia, serif;
+            font-size: 24px;
+        }
+
+        .brand h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .brand h2 span {
+            color: #e6ba61;
+        }
+
+        .brand small {
+            color: #9eb1c6;
+        }
+
+        .menu {
+            margin-top: 18px;
+        }
+
+        .menu a {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            margin-bottom: 5px;
+            padding: 12px 13px;
+            border-radius: 9px;
+            color: #dbe7f4;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            color: #f0ca79;
+            background: rgba(255,255,255,.12);
+            border-left: 3px solid #d7a952;
+        }
+
+        .content {
+            width: calc(100% - 245px);
+            margin-left: 245px;
+        }
+
+        .topbar {
+            min-height: 67px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            color: white;
+            background: #071b33;
+        }
+
+        .topbar h2 {
+            margin: 0;
+            font-size: 19px;
+        }
+
+        .status {
+            padding: 7px 11px;
+            border: 1px solid #4e7398;
+            border-radius: 18px;
+            color: #bcd0e3;
+            font-size: 12px;
+        }
+
+        main {
+            width: min(1000px, 93%);
+            margin: 25px auto 60px;
+        }
+
+        .hero {
+            margin-bottom: 18px;
+            padding: 25px;
+            border-radius: 15px;
+            color: white;
+            background: linear-gradient(135deg, #123c67, #1a598d);
+        }
+
+        .hero h1 {
+            margin: 0 0 8px;
+            color: #efc879;
+            font-size: 27px;
+        }
+
+        .hero p {
+            max-width: 760px;
+            margin: 0;
+            color: #d8e5f1;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .ask-card {
+            padding: 18px;
+            border: 1px solid #dce3eb;
+            border-radius: 13px;
+            background: white;
+            box-shadow: 0 5px 17px rgba(16,40,68,.07);
+        }
+
+        .ask-card label {
+            display: block;
+            margin-bottom: 9px;
+            font-weight: bold;
+        }
+
+        .ask-row {
+            display: grid;
+            grid-template-columns: 1fr 145px;
+            gap: 10px;
+        }
+
+        .ask-row input {
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid #cfd9e4;
+            border-radius: 9px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .ask-row input:focus {
+            border-color: #178ac2;
+            box-shadow: 0 0 0 3px rgba(23,138,194,.12);
+        }
+
+        .ask-row button {
+            border: 0;
+            border-radius: 9px;
+            color: white;
+            background: #1689c1;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: 12px;
+        }
+
+        .example {
+            padding: 7px 10px;
+            border: 1px solid #d8e1ea;
+            border-radius: 16px;
+            color: #53677d;
+            background: #f7f9fb;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .answer-card {
+            margin-top: 18px;
+            padding: 21px;
+            border: 1px solid #d8e2eb;
+            border-radius: 13px;
+            background: white;
+            box-shadow: 0 5px 17px rgba(16,40,68,.06);
+        }
+
+        .answer-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 13px;
+        }
+
+        .answer-icon {
+            width: 39px;
+            height: 39px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            background: #e8f4fb;
+            font-size: 20px;
+        }
+
+        .answer-title h3 {
+            margin: 0;
+        }
+
+        .answer-text {
+            padding: 15px;
+            border-left: 4px solid #d5a84f;
+            border-radius: 7px;
+            color: #3f5369;
+            background: #fff9ed;
+            line-height: 1.65;
+        }
+
+        .warning {
+            margin-top: 12px;
+            color: #718095;
+            font-size: 12px;
+        }
+
+        .results-title {
+            margin: 24px 0 13px;
+            font-size: 21px;
+        }
+
+        .result-card {
+            display: grid;
+            grid-template-columns: 75px 1fr auto;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 11px;
+            padding: 15px;
+            border: 1px solid #dce3eb;
+            border-radius: 11px;
+            background: white;
+        }
+
+        .result-icon {
+            width: 68px;
+            height: 68px;
+            display: grid;
+            place-items: center;
+            border-radius: 9px;
+            background: #eef3f8;
+            font-size: 30px;
+        }
+
+        .result-card h3 {
+            margin: 0 0 7px;
+            font-size: 16px;
+        }
+
+        .meta {
+            margin-bottom: 7px;
+            color: #748398;
+            font-size: 12px;
+        }
+
+        .description {
+            margin: 0;
+            color: #52667c;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .source {
+            margin-top: 7px;
+            color: #936319;
+            font-size: 12px;
+        }
+
+        .source a {
+            color: #936319;
+        }
+
+        .view-button {
+            padding: 9px 12px;
+            border-radius: 7px;
+            color: white;
+            background: #123e68;
+            text-decoration: none;
+            white-space: nowrap;
+            font-size: 12px;
+        }
+
+        .empty {
+            margin-top: 18px;
+            padding: 45px 20px;
+            border: 1px dashed #bec9d6;
+            border-radius: 12px;
+            background: white;
+            text-align: center;
+        }
+
+        @media (max-width: 750px) {
+            .sidebar {
+                display: none;
+            }
+
+            .content {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .ask-row {
+                grid-template-columns: 1fr;
+            }
+
+            .ask-row button {
+                padding: 12px;
+            }
+
+            .result-card {
+                grid-template-columns: 60px 1fr;
+            }
+
+            .view-button {
+                grid-column: 1 / -1;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="logo">S</div>
+
+            <div>
+                <h2>SyrMura <span>AI</span></h2>
+                <small>Цифрлық архив</small>
+            </div>
+        </div>
+
+        <nav class="menu">
+            <a href="/">🏠 Басты бет</a>
+            
+            <a href="/#search">🔎 Ақылды іздеу</a>
+            <a href="/#timeline">🕘 Уақыт желісі</a>
+            <a href="/#map">🗺️ Архив картасы</a>
+            <a href="/#laboratory">🧪 ЖИ зертхана</a>
+            <a href="/ai-archivist" class="active">🤖 ЖИ архивші</a>
+            <a href="/archive">📁 Мұрағат</a>
+            <a href="/#exhibition">🏛️ Виртуалды көрме</a>
+        </nav>
+    </aside>
+
+    <section class="content">
+
+        <header class="topbar">
+            <h2>ЖИ архивші</h2>
+            <div class="status">● Тек жарияланған деректер</div>
+        </header>
+
+        <main>
+            <section class="hero">
+                <h1>🤖 SyrMura AI архившісі</h1>
+
+                <p>
+                    Қызылорда облысының жарияланған архив
+                    материалдарынан ақпарат іздейді. Әр жауаптың
+                    астында пайдаланылған дереккөз көрсетіледі.
+                </p>
+            </section>
+
+            <form class="ask-card"
+                  method="GET"
+                  action="/ai-archivist">
+
+                <label>Архивке сұрақ қойыңыз</label>
+
+                <div class="ask-row">
+                    <input
+                        id="questionInput"
+                        type="search"
+                        name="q"
+                        value="{{ question }}"
+                        required
+                        placeholder="Мысалы: Перовск қаласының сауда орындары">
+
+                    <button type="submit">
+                        🔍 Жауап іздеу
+                    </button>
+                </div>
+
+                <div class="examples">
+                    <button class="example"
+                            type="button"
+                            onclick="setQuestion(
+                                'Перовск қаласының тарихы'
+                            )">
+                        Перовск қаласының тарихы
+                    </button>
+
+                    <button class="example"
+                            type="button"
+                            onclick="setQuestion(
+                                'Қызылордадағы тарихи фотосуреттер'
+                            )">
+                        Тарихи фотосуреттер
+                    </button>
+
+                    <button class="example"
+                            type="button"
+                            onclick="setQuestion(
+                                '1872 жылғы архив материалы'
+                            )">
+                        1872 жылғы материал
+                    </button>
+                </div>
+            </form>
+
+            {% if question %}
+                <section class="answer-card">
+                    <div class="answer-title">
+                        <div class="answer-icon">✨</div>
+                        <h3>SyrMura AI жауабы</h3>
+                    </div>
+
+                    <div class="answer-text">
+                        {{ answer }}
+                    </div>
+
+                    <div class="warning">
+                        Жауап тек жарияланған архив жазбаларына
+                        сүйеніп құрастырылды. Тарихи тұжырымды
+                        қолданар алдында түпнұсқа дереккөзді қараңыз.
+                    </div>
+                </section>
+
+                {% if results %}
+                    <h2 class="results-title">
+                        Пайдаланылған дереккөздер
+                    </h2>
+
+                    {% for doc in results %}
+                        <article class="result-card">
+
+                            <div class="result-icon">
+                                {% if doc.is_image %}
+                                    🖼️
+                                {% else %}
+                                    📄
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <h3>{{ doc.title }}</h3>
+
+                                <div class="meta">
+                                    📅 {{ doc.document_year or
+                                           'Жылы белгісіз' }}
+                                    · 📁 {{ doc.subsection or
+                                            'Бөлімшесіз' }}
+                                </div>
+
+                                <p class="description">
+                                    {{ doc.description or
+                                       'Сипаттамасы көрсетілмеген.' }}
+                                </p>
+
+                                <div class="source">
+                                    <b>Дереккөз:</b>
+
+                                    {% if doc.source_url %}
+                                        <a href="{{ doc.source_url }}"
+                                           target="_blank"
+                                           rel="noopener noreferrer">
+                                            {{ doc.source_name or
+                                               'Сілтемені ашу' }} ↗
+                                        </a>
+                                    {% else %}
+                                        {{ doc.source_name or
+                                           'Көрсетілмеген' }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <a class="view-button"
+                               href="{{ url_for(
+                                   'public_document_file',
+                                   document_id=doc.id
+                               ) }}"
+                               target="_blank">
+                                Құжатты көру
+                            </a>
+                        </article>
+                    {% endfor %}
+
+                {% else %}
+                    <div class="empty">
+                        <div style="font-size:40px;">🔎</div>
+                        <h3>Сәйкес архив материалы табылмады</h3>
+                        <p>
+                            Басқа негізгі сөздермен қайта іздеп көріңіз.
+                        </p>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </main>
+    </section>
+</div>
+
+<script>
+function setQuestion(question) {
+    const input = document.getElementById("questionInput");
+    input.value = question;
+    input.focus();
+}
+</script>
+
+</body>
+</html>

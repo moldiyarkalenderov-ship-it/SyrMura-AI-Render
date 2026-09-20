@@ -1,0 +1,58 @@
+{
+    "railway.jpg": {
+        "title": "Қызылорда теміржол вокзалы",
+        "description": "ХХ ғасырдың басындағы Қызылорда қаласының теміржол вокзалы.",
+        "source_name": "Vlast.kz",
+        "source_url": "https://vlast.kz/istorija/30638-krasnaa-stolica-kak-perenosili-centr-iz-orenburga-v-kzyl-ordu.html",
+        "license": "Дереккөздің пайдалану талаптарына сәйкес"
+    },
+    "syrdarya_map_detail.jpg": {
+        "title": "Сырдария облысының тарихи картасы",
+        "description": "Арал теңізі, Қазалы, Перовск және Сырдария бойындағы елді мекендер көрсетілген карта.",
+        "source_name": "Wikimedia Commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Syr-Darya_oblast.jpg",
+        "license": "Public domain — қоғамдық игілік"
+    },
+    "alas.jpg": {
+        "title": "Алаш Орда кеңесінің тарихи құжаты",
+        "description": "1918 жылы араб жазуымен толтырылған Алаш Орда құжаты.",
+        "source_name": "Қазақстан тарихы порталы",
+        "source_url": "https://e-history.kz/ru/news/show/4427",
+        "license": "Автор немесе редакция рұқсатымен пайдаланылады"
+    },
+    "kyzylorda_old.jpg": {
+        "title": "Ақмешіт қаласының тарихи көрінісі",
+        "description": "Қызылорда қаласының Ақмешіт деп аталған кезеңіне қатысты көне фотосурет.",
+        "source_name": "Қазақстан тарихы порталы",
+        "source_url": "https://e-history.kz/en/news/show/7528",
+        "license": "Автор немесе редакция рұқсатымен пайдаланылады"
+    },
+    "baikonur_people.jpg": {
+        "title": "Байқоңырдағы ғарышкерлерді шығарып салу",
+        "description": "Ғарышкерлердің зымыранға көтерілу алдындағы тарихи сәті.",
+        "source_name": "Аргументы и факты",
+        "source_url": "https://aif.ru/society/science/psevdonim_baykonur_kak_pervyy_v_mire_kosmodrom_poluchil_chuzhoe_imya",
+        "license": "Дереккөздің пайдалану талаптарына сәйкес"
+    },
+    "baikonur.jpg": {
+        "title": "Байқоңырдан зымыран ұшыру",
+        "description": "Зымыранның Байқоңыр ғарыш айлағынан ұшырылған тарихи сәті.",
+        "source_name": "ҚазАқпарат",
+        "source_url": "https://kaz.inform.kz/news/baykonirdin-rges-kalanganina-70-zhil-toldi-934950/",
+        "license": "Дереккөздің пайдалану талаптарына сәйкес"
+    },
+    "syrdarya_map.jpg": {
+        "title": "Сырдария қоныстандыру ауданының картасы",
+        "description": "Сырдария, Ферғана және Самарқанд облыстары көрсетілген тарихи карта.",
+        "source_name": "MyTashkent",
+        "source_url": "https://mytashkent.uz/2022/02/28/pereselencheskij-poselok-v-chimkentskom-uezde-1910-e-gody/",
+        "license": "Дереккөздің пайдалану талаптарына сәйкес"
+    },
+    "akmeshit_fortress.jpg": {
+        "title": "Ақмешіт бекінісінің тарихи қалдығы",
+        "description": "ХІХ ғасырдағы Ақмешіт бекінісінен сақталған көне құрылыс бөлігі.",
+        "source_name": "Fergana Media",
+        "source_url": "https://fergana.media/articles/136503/",
+        "license": "Дереккөздің пайдалану талаптарына сәйкес"
+    }
+}

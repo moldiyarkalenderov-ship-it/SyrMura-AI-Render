@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SyrMura AI — Қош келдіңіз</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --dark: #071d36;
+    --dark-light: #123c66;
+    --gold: #e9b85c;
+    --blue: #168fc7;
+    --background: #edf3f8;
+    --text: #132a43;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--text);
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(31,115,167,.20),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #061a31,
+            #123c66
+        );
+    font-family: Arial, sans-serif;
+}
+
+.auth-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 30px;
+}
+
+.auth-layout {
+    display: grid;
+    grid-template-columns: 1.05fr .95fr;
+    width: min(1050px, 100%);
+    overflow: hidden;
+    background: white;
+    border-radius: 22px;
+    box-shadow: 0 25px 65px rgba(0,0,0,.25);
+}
+
+.auth-presentation {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 620px;
+    padding: 55px;
+    color: white;
+    background:
+        linear-gradient(
+            rgba(7,29,54,.78),
+            rgba(7,29,54,.90)
+        ),
+        linear-gradient(
+            135deg,
+            #174f7e,
+            #071d36
+        );
+}
+
+.logo-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 45px;
+}
+
+.logo-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 62px;
+    height: 62px;
+    color: var(--gold);
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    font: 34px Georgia, serif;
+}
+
+.logo-row h2 {
+    margin: 0;
+    font-size: 27px;
+}
+
+.logo-row h2 span {
+    color: var(--gold);
+}
+
+.logo-row p {
+    margin: 5px 0 0;
+    color: #b7cde2;
+    font-size: 12px;
+}
+
+.auth-presentation h1 {
+    margin: 0 0 18px;
+    color: var(--gold);
+    font-size: 39px;
+    line-height: 1.15;
+}
+
+.auth-presentation > p {
+    max-width: 520px;
+    margin: 0;
+    color: #dce9f4;
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+.feature-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 32px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    color: #eaf4fc;
+}
+
+.auth-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 620px;
+    padding: 50px;
+}
+
+.auth-content h1 {
+    margin: 0 0 8px;
+    color: #123b61;
+    font-size: 29px;
+}
+
+.subtitle {
+    margin: 0 0 28px;
+    color: #6d7c8e;
+    line-height: 1.5;
+}
+
+.button-group {
+    display: grid;
+    gap: 13px;
+}
+
+.primary-button,
+.secondary-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    padding: 12px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.primary-button {
+    color: white;
+    background: var(--blue);
+    border: 1px solid var(--blue);
+}
+
+.primary-button:hover {
+    background: #087bac;
+}
+
+.secondary-button {
+    color: #173a5a;
+    background: white;
+    border: 1px solid #cbd8e4;
+}
+
+.secondary-button:hover {
+    color: #9b6d16;
+    border-color: var(--gold);
+    background: #fffaf0;
+}
+
+.form-group {
+    margin-bottom: 17px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    color: #27445f;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    height: 48px;
+    padding: 0 14px;
+    color: #15304a;
+    background: white;
+    border: 1px solid #ccd8e4;
+    border-radius: 9px;
+    outline: none;
+    font-size: 14px;
+}
+
+.form-group input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(22,143,199,.11);
+}
+
+.submit-button {
+    width: 100%;
+    min-height: 50px;
+    margin-top: 4px;
+    color: white;
+    background: var(--blue);
+    border: 0;
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.submit-button:hover {
+    background: #087bac;
+}
+
+.form-footer {
+    margin-top: 22px;
+    text-align: center;
+    color: #68798b;
+    font-size: 14px;
+}
+
+.form-footer a {
+    color: #1084ba;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.alert {
+    padding: 12px 14px;
+    margin-bottom: 17px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.alert-success {
+    color: #176641;
+    background: #e6f8ef;
+    border: 1px solid #a9e4c6;
+}
+
+.alert-error {
+    color: #9a3030;
+    background: #fff0f0;
+    border: 1px solid #edbbbb;
+}
+
+.mode-grid {
+    display: grid;
+    gap: 15px;
+}
+
+.mode-card {
+    display: block;
+    padding: 20px;
+    color: #163653;
+    background: #f7fafc;
+    border: 1px solid #d9e3ec;
+    border-radius: 12px;
+    text-decoration: none;
+}
+
+.mode-card:hover {
+    border-color: var(--gold);
+    background: #fffaf0;
+}
+
+.mode-icon {
+    display: block;
+    margin-bottom: 9px;
+    font-size: 28px;
+}
+
+.mode-card h3 {
+    margin: 0 0 7px;
+}
+
+.mode-card p {
+    margin: 0;
+    color: #708093;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.security-note {
+    margin-top: 25px;
+    color: #7b8998;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+@media (max-width: 800px) {
+    .auth-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-presentation {
+        min-height: auto;
+        padding: 35px;
+    }
+
+    .auth-content {
+        min-height: auto;
+        padding: 35px;
+    }
+}
+</style>
+
+</head>
+
+<body>
+<main class="auth-page">
+    <div class="auth-layout">
+        
+<section class="auth-presentation">
+    <div class="logo-row">
+        <div class="logo-circle">S</div>
+        <div>
+            <h2>SyrMura <span>AI</span></h2>
+            <p>
+                Қызылорда облысының<br>
+                цифрлық архиві
+            </p>
+        </div>
+    </div>
+
+    <h1>Тарихи мұраны цифрлық кеңістікте зерттеңіз</h1>
+
+    <p>
+        Архив құжаттарын іздеу, салыстыру,
+        уақыт желісі мен карта арқылы зерттеу
+        мүмкіндіктерін бір платформадан пайдаланыңыз.
+    </p>
+
+    <div class="feature-list">
+        <div class="feature-item">
+            <span>✓</span>
+            <span>Жарияланған архив материалдары</span>
+        </div>
+
+        <div class="feature-item">
+            <span>✓</span>
+            <span>Ақылды іздеу және зертхана</span>
+        </div>
+
+        <div class="feature-item">
+            <span>✓</span>
+            <span>Қауіпсіз рөлдік қолжетімділік</span>
+        </div>
+    </div>
+</section>
+
+
+        <section class="auth-content">
+            <h1>Қош келдіңіз!</h1>
+
+            <p class="subtitle">
+                Платформаны пайдалану үшін жүйеге кіріңіз
+                немесе жаңа аккаунт ашыңыз.
+            </p>
+
+            <div class="button-group">
+                <a class="primary-button" href="/login">
+                    🔐 Кіру
+                </a>
+
+                <a class="secondary-button" href="/register">
+                    ✍️ Тіркелу
+                </a>
+            </div>
+
+            <p class="security-note">
+                Қарапайым қолданушылар жалпы платформаны
+                пайдаланады. Әкімші панелі тек әкімші рөлі
+                бар аккаунттарға қолжетімді.
+            </p>
+        </section>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,480 @@
+
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Цифрлық мұрағат — SyrMura AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #11233e;
+            background: #f2f5f9;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 70px;
+            padding: 0 6%;
+            color: white;
+            background: #071b33;
+            box-shadow: 0 3px 12px rgba(0,0,0,.14);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 43px;
+            height: 43px;
+            display: grid;
+            place-items: center;
+            border: 2px solid #d8ad5e;
+            border-radius: 50%;
+            color: #e9c675;
+            font-family: Georgia, serif;
+            font-size: 24px;
+        }
+
+        .brand h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .brand h2 span {
+            color: #e4b962;
+        }
+
+        nav {
+            display: flex;
+            gap: 25px;
+        }
+
+        nav a {
+            padding: 24px 0;
+            color: #dce7f5;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #efc771;
+            border-bottom: 2px solid #efc771;
+        }
+
+        .hero {
+            padding: 55px 6%;
+            color: white;
+            background:
+                linear-gradient(rgba(4,24,46,.88), rgba(8,40,70,.92)),
+                radial-gradient(circle at right, #315276, #071b33);
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: auto;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            margin-bottom: 15px;
+            padding: 8px 16px;
+            border: 1px solid #cfa657;
+            border-radius: 20px;
+            color: #edc778;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 {
+            margin: 0 0 13px;
+            font-size: 40px;
+        }
+
+        .hero h1 span {
+            color: #edc778;
+        }
+
+        .hero p {
+            max-width: 720px;
+            margin: auto;
+            color: #d1deec;
+            line-height: 1.7;
+        }
+
+        .container {
+            width: min(1180px, 92%);
+            margin: 28px auto 60px;
+        }
+
+        .search-panel {
+            display: grid;
+            grid-template-columns: 1fr 230px 130px;
+            gap: 10px;
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 5px 18px rgba(15,38,65,.07);
+        }
+
+        .search-panel input,
+        .search-panel select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d6dfe9;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .search-panel button {
+            border: 0;
+            border-radius: 8px;
+            color: white;
+            background: #1587bf;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .section-title h2 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .document-count {
+            color: #6d7e91;
+            font-size: 14px;
+        }
+
+        .archive-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .archive-card {
+            overflow: hidden;
+            border: 1px solid #dce4ed;
+            border-radius: 13px;
+            background: white;
+            box-shadow: 0 5px 17px rgba(18,42,70,.07);
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .archive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 26px rgba(18,42,70,.13);
+        }
+
+        .preview {
+            height: 220px;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            background: #dce3eb;
+        }
+
+        .preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .pdf-preview {
+            color: #52677f;
+            font-size: 70px;
+        }
+
+        .card-body {
+            padding: 17px;
+        }
+
+        .year {
+            display: inline-block;
+            margin-bottom: 9px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            color: #9a6818;
+            background: #fff3d8;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .card-body h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+            line-height: 1.35;
+        }
+
+        .category {
+            margin-bottom: 10px;
+            color: #61748a;
+            font-size: 13px;
+        }
+
+        .description {
+            height: 63px;
+            overflow: hidden;
+            margin-bottom: 13px;
+            color: #526479;
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        .source {
+            padding-top: 11px;
+            border-top: 1px solid #edf0f4;
+            color: #56687d;
+            font-size: 12px;
+        }
+
+        .source a {
+            color: #a76e16;
+            text-decoration: none;
+        }
+
+        .view-button {
+            display: block;
+            margin-top: 13px;
+            padding: 10px;
+            border-radius: 7px;
+            color: white;
+            background: #123f69;
+            text-align: center;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .permission {
+            margin: 25px 0;
+            padding: 15px 18px;
+            border-left: 4px solid #d3a34d;
+            border-radius: 8px;
+            color: #4b5e74;
+            background: #fff8e9;
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        .empty {
+            grid-column: 1 / -1;
+            padding: 65px 20px;
+            border: 1px dashed #bdc9d6;
+            border-radius: 12px;
+            background: white;
+            text-align: center;
+        }
+
+        footer {
+            padding: 25px;
+            color: #9eb0c3;
+            background: #071b33;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        @media (max-width: 900px) {
+            nav {
+                display: none;
+            }
+
+            .archive-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .search-panel {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: 29px;
+            }
+
+            .archive-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <a class="brand" href="/">
+        <div class="logo">S</div>
+        <h2>SyrMura <span>AI</span></h2>
+    </a>
+
+    <nav>
+        <a href="/">Басты бет</a>
+        <a href="/archive" class="active">Мұрағат</a>
+        <a href="/#collections">Коллекциялар</a>
+        <a href="/#ai">Қолданбалы AI</a>
+        <a href="/#search">Іздеу</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <div class="badge">ҚЫЗЫЛОРДА ОБЛЫСЫНЫҢ ТАРИХИ МҰРАСЫ</div>
+
+        <h1><span>Цифрлық</span> мұрағат</h1>
+
+        <p>
+            Әкімші тексеріп, жариялауға рұқсат берген тарихи
+            құжаттар, фотосуреттер, карталар және басқа архив
+            материалдары.
+        </p>
+    </div>
+</section>
+
+<main class="container">
+
+    <form class="search-panel" method="GET" action="/archive">
+        <input
+            type="search"
+            name="q"
+            value="{{ search_query }}"
+            placeholder="Құжат атауы немесе сипаттамасы бойынша іздеу">
+
+        <select name="section">
+            <option value="">Барлық бөлімдер</option>
+
+            {% for section_item in sections %}
+                <option
+                    value="{{ section_item }}"
+                    {% if selected_section == section_item %}selected{% endif %}>
+                    {{ section_item }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">🔍 Іздеу</button>
+    </form>
+
+    <div class="permission">
+        🔐 Мұнда тек архив әкімшісі тексеріп, жариялауға рұқсат
+        берген материалдар көрсетіледі. Түпнұсқа архив файлдары
+        өзгертілмейді және қорғалған ортада сақталады.
+    </div>
+
+    <div class="section-title">
+        <h2>Архив материалдары</h2>
+        <div class="document-count">
+            Табылған материал: {{ documents|length }}
+        </div>
+    </div>
+
+    <section class="archive-grid">
+
+        {% if documents %}
+            {% for doc in documents %}
+                <article class="archive-card">
+
+                    <div class="preview">
+                        {% if doc['is_image'] %}
+                            <img
+                                src="{{ url_for(
+                                    'public_document_file',
+                                    document_id=doc['id']
+                                ) }}"
+                                alt="{{ doc['title'] }}"
+                                loading="lazy">
+                        {% else %}
+                            <div class="pdf-preview">📄</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="card-body">
+                        <div class="year">
+                            {{ doc['document_year'] or 'Жылы белгісіз' }}
+                        </div>
+
+                        <h3>{{ doc['title'] }}</h3>
+
+                        <div class="category">
+                            📁 {{ doc['section'] }}
+                            {% if doc['subsection'] %}
+                                · {{ doc['subsection'] }}
+                            {% endif %}
+                        </div>
+
+                        <div class="description">
+                            {{ doc['description'] or
+                               'Материал туралы сипаттама берілмеген.' }}
+                        </div>
+
+                        <div class="source">
+                            <b>Дереккөз:</b>
+
+                            {% if doc['source_url'] %}
+                                <a href="{{ doc['source_url'] }}"
+                                   target="_blank"
+                                   rel="noopener noreferrer">
+                                    {{ doc['source_name'] or
+                                       'Дереккөзді ашу' }} ↗
+                                </a>
+                            {% else %}
+                                {{ doc['source_name'] or
+                                   'Дереккөз көрсетілмеген' }}
+                            {% endif %}
+                        </div>
+
+                        <a class="view-button"
+                           href="{{ url_for(
+                               'public_document_file',
+                               document_id=doc['id']
+                           ) }}"
+                           target="_blank">
+                            👁️ Материалды толық көру
+                        </a>
+                    </div>
+                </article>
+            {% endfor %}
+
+        {% else %}
+            <div class="empty">
+                <div style="font-size:45px;">📭</div>
+                <h3>Материал табылмады</h3>
+                <p>Іздеу сөзін немесе бөлімді өзгертіп көріңіз.</p>
+            </div>
+        {% endif %}
+    </section>
+</main>
+
+<footer>
+    © 2026 SyrMura AI — Қызылорда облысының цифрлық архиві
+</footer>
+
+</body>
+</html>
