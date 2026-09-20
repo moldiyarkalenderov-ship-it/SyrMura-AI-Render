@@ -1,0 +1,582 @@
+
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Мұрағат — SyrMura AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #10243f;
+            background: #f2f5f9;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 68px;
+            padding: 0 5%;
+            color: white;
+            background: #071b33;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo {
+            width: 42px;
+            height: 42px;
+            display: grid;
+            place-items: center;
+            border: 2px solid #ddb45f;
+            border-radius: 50%;
+            color: #edc778;
+            font-family: Georgia, serif;
+            font-size: 23px;
+        }
+
+        .brand-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .brand-title span {
+            color: #e5b95f;
+        }
+
+        nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        nav a {
+            padding: 24px 0;
+            color: #d7e2ef;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        nav a.active,
+        nav a:hover {
+            color: #edc778;
+            border-bottom: 2px solid #edc778;
+        }
+
+        .hero {
+            padding: 43px 5%;
+            color: white;
+            background: linear-gradient(135deg, #0a2544, #174e7d);
+        }
+
+        .hero-inner {
+            width: min(1150px, 100%);
+            margin: auto;
+        }
+
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: 36px;
+        }
+
+        .hero h1 span {
+            color: #edc778;
+        }
+
+        .hero p {
+            max-width: 760px;
+            margin: 0;
+            color: #d5e1ee;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: min(1150px, 92%);
+            margin: 25px auto 55px;
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: 1fr 150px;
+            gap: 10px;
+            margin-bottom: 22px;
+            padding: 14px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 4px 16px rgba(12,36,63,.07);
+        }
+
+        .search-form input {
+            padding: 12px 14px;
+            border: 1px solid #d5dee8;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .search-form button {
+            border: 0;
+            border-radius: 8px;
+            color: white;
+            background: #1488c0;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .section-heading {
+            margin: 27px 0 14px;
+        }
+
+        .section-heading h2 {
+            margin: 0 0 5px;
+            font-size: 24px;
+        }
+
+        .section-heading p {
+            margin: 0;
+            color: #68798d;
+            font-size: 14px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 13px;
+        }
+
+        .category-card {
+            position: relative;
+            min-height: 125px;
+            padding: 18px;
+            overflow: hidden;
+            border: 1px solid #dce3ec;
+            border-radius: 12px;
+            color: #142d4b;
+            background: white;
+            text-decoration: none;
+            box-shadow: 0 4px 14px rgba(17,42,70,.06);
+            transition: .2s;
+        }
+
+        .category-card:hover,
+        .category-card.active {
+            color: white;
+            background: linear-gradient(135deg, #123b64, #1a5a8e);
+            transform: translateY(-3px);
+        }
+
+        .category-icon {
+            margin-bottom: 12px;
+            font-size: 30px;
+        }
+
+        .category-name {
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .category-count {
+            margin-top: 6px;
+            color: #728298;
+            font-size: 12px;
+        }
+
+        .category-card:hover .category-count,
+        .category-card.active .category-count {
+            color: #d8e6f2;
+        }
+
+        .all-category {
+            border-color: #dab15e;
+        }
+
+        .permission {
+            margin: 22px 0;
+            padding: 13px 17px;
+            border-left: 4px solid #d5a84f;
+            border-radius: 8px;
+            color: #516377;
+            background: #fff8e8;
+            font-size: 13px;
+        }
+
+        .materials-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 28px 0 15px;
+        }
+
+        .materials-header h2 {
+            margin: 0;
+            font-size: 23px;
+        }
+
+        .result-count {
+            color: #718197;
+            font-size: 13px;
+        }
+
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 17px;
+        }
+
+        .material-card {
+            overflow: hidden;
+            border: 1px solid #dce3eb;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 5px 16px rgba(15,40,68,.07);
+        }
+
+        .preview {
+            height: 205px;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            background: #dce3eb;
+        }
+
+        .preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .file-symbol {
+            color: #536b83;
+            font-size: 65px;
+        }
+
+        .material-content {
+            padding: 16px;
+        }
+
+        .material-year {
+            display: inline-block;
+            margin-bottom: 8px;
+            padding: 5px 9px;
+            border-radius: 13px;
+            color: #996615;
+            background: #fff2d7;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .material-content h3 {
+            min-height: 44px;
+            margin: 0 0 8px;
+            font-size: 17px;
+            line-height: 1.35;
+        }
+
+        .subsection-label {
+            margin-bottom: 9px;
+            color: #9b6c20;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .description {
+            height: 60px;
+            overflow: hidden;
+            margin-bottom: 11px;
+            color: #596b80;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .source {
+            padding-top: 10px;
+            border-top: 1px solid #ebeff3;
+            color: #627388;
+            font-size: 12px;
+        }
+
+        .source a {
+            color: #9c691c;
+        }
+
+        .view-button {
+            display: block;
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 7px;
+            color: white;
+            background: #123e68;
+            text-align: center;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .empty {
+            grid-column: 1 / -1;
+            padding: 55px 20px;
+            border: 1px dashed #bbc7d4;
+            border-radius: 12px;
+            background: white;
+            text-align: center;
+        }
+
+        footer {
+            padding: 23px;
+            color: #9eb0c4;
+            background: #071b33;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        @media (max-width: 900px) {
+            nav {
+                display: none;
+            }
+
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .materials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            .category-grid,
+            .materials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <a href="/" class="brand">
+        <div class="logo">S</div>
+        <div class="brand-title">
+            SyrMura <span>AI</span>
+        </div>
+    </a>
+
+    <nav>
+        <a href="/">Басты бет</a>
+        
+        <a href="/#collections">Коллекциялар</a>
+        <a href="/#ai">Қолданбалы AI</a>
+        <a href="/#search">Іздеу</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <div class="hero-inner">
+        <h1><span>Мұрағат</span> материалдары</h1>
+
+        <p>
+            Қызылорда облысына қатысты тарихи құжаттар,
+            фотосуреттер, қолжазбалар, газеттер, карталар,
+            бейне және аудио материалдар бір ортада жинақталған.
+        </p>
+    </div>
+</section>
+
+<main class="container">
+
+    <form class="search-form"
+          method="GET"
+          action="/archive">
+
+        {% if selected_subsection %}
+            <input type="hidden"
+                   name="subsection"
+                   value="{{ selected_subsection }}">
+        {% endif %}
+
+        <input
+            type="search"
+            name="q"
+            value="{{ search_query }}"
+            placeholder="Мұрағат материалын іздеу...">
+
+        <button type="submit">🔍 Іздеу</button>
+    </form>
+
+    <section class="section-heading">
+        <h2>Мұрағат бөлімшелері</h2>
+        <p>Қажетті материал түрін таңдаңыз</p>
+    </section>
+
+    <section class="category-grid">
+
+        <a href="/archive"
+           class="category-card all-category
+                  {% if not selected_subsection %}active{% endif %}">
+
+            <div class="category-icon">🗄️</div>
+            <div class="category-name">Барлық материалдар</div>
+            <div class="category-count">
+                {{ total_count }} материал
+            </div>
+        </a>
+
+        {% for category in categories %}
+            <a href="/archive?subsection={{ category.name|urlencode }}"
+               class="category-card
+                      {% if selected_subsection == category.name %}
+                      active
+                      {% endif %}">
+
+                <div class="category-icon">
+                    {{ category.icon }}
+                </div>
+
+                <div class="category-name">
+                    {{ category.name }}
+                </div>
+
+                <div class="category-count">
+                    {{ category.count }} материал
+                </div>
+            </a>
+        {% endfor %}
+    </section>
+
+    <div class="permission">
+        🔐 Мұнда тек архив әкімшісі тексеріп,
+        жариялауға рұқсат берген материалдар көрсетіледі.
+    </div>
+
+    <section class="materials-header">
+        <h2>
+            {% if selected_subsection %}
+                {{ selected_subsection }}
+            {% else %}
+                Барлық материалдар
+            {% endif %}
+        </h2>
+
+        <div class="result-count">
+            Нәтиже: {{ documents|length }}
+        </div>
+    </section>
+
+    <section class="materials-grid">
+
+        {% if documents %}
+            {% for doc in documents %}
+
+                <article class="material-card">
+
+                    <div class="preview">
+                        {% if doc.is_image %}
+                            <img
+                                src="{{ url_for(
+                                    'public_document_file',
+                                    document_id=doc.id
+                                ) }}"
+                                alt="{{ doc.title }}"
+                                loading="lazy">
+                        {% else %}
+                            <div class="file-symbol">
+                                {% if doc.extension == '.pdf' %}
+                                    📄
+                                {% elif doc.extension in
+                                    ['.mp4', '.avi', '.mov'] %}
+                                    🎞️
+                                {% elif doc.extension in
+                                    ['.mp3', '.wav'] %}
+                                    🎧
+                                {% else %}
+                                    📁
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="material-content">
+                        <div class="material-year">
+                            {{ doc.document_year or 'Жылы белгісіз' }}
+                        </div>
+
+                        <h3>{{ doc.title }}</h3>
+
+                        <div class="subsection-label">
+                            {{ doc.subsection or 'Бөлімшесіз' }}
+                        </div>
+
+                        <div class="description">
+                            {{ doc.description or
+                               'Материал сипаттамасы көрсетілмеген.' }}
+                        </div>
+
+                        <div class="source">
+                            <b>Дереккөз:</b>
+
+                            {% if doc.source_url %}
+                                <a href="{{ doc.source_url }}"
+                                   target="_blank"
+                                   rel="noopener noreferrer">
+                                    {{ doc.source_name or
+                                       'Сілтемені ашу' }} ↗
+                                </a>
+                            {% else %}
+                                {{ doc.source_name or
+                                   'Көрсетілмеген' }}
+                            {% endif %}
+                        </div>
+
+                        <a class="view-button"
+                           href="{{ url_for(
+                               'public_document_file',
+                               document_id=doc.id
+                           ) }}"
+                           target="_blank">
+                            👁️ Материалды көру
+                        </a>
+                    </div>
+                </article>
+
+            {% endfor %}
+
+        {% else %}
+            <div class="empty">
+                <div style="font-size:44px;">📭</div>
+                <h3>Бұл бөлімшеде материал жоқ</h3>
+                <p>
+                    Материал әкімші тарапынан жарияланғаннан
+                    кейін осы жерде пайда болады.
+                </p>
+            </div>
+        {% endif %}
+    </section>
+</main>
+
+<footer>
+    © 2026 SyrMura AI — Қызылорда облысының цифрлық мұрағаты
+</footer>
+
+</body>
+</html>

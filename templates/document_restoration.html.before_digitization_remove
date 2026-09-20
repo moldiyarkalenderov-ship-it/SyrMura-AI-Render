@@ -1,0 +1,510 @@
+
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Құжатты қалпына келтіру — SyrMura AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f2f5f9;
+            color: #10233e;
+            font-family: Arial, sans-serif;
+        }
+
+        .layout {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 250px minmax(0, 1fr);
+        }
+
+        .sidebar {
+            padding: 24px 16px;
+            color: white;
+            background: linear-gradient(
+                180deg,
+                #102f55,
+                #061a32
+            );
+        }
+
+        .brand {
+            padding: 0 10px 22px;
+            border-bottom: 1px solid
+                rgba(255,255,255,.12);
+        }
+
+        .brand h2 {
+            margin: 0;
+            font-size: 23px;
+        }
+
+        .brand h2 span {
+            color: #e2b75e;
+        }
+
+        .brand p {
+            margin: 7px 0 0;
+            color: #adc0d8;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .menu {
+            margin-top: 20px;
+        }
+
+        .menu a {
+            display: block;
+            margin-bottom: 6px;
+            padding: 13px 14px;
+            border-radius: 9px;
+            color: #eef5ff;
+            text-decoration: none;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            color: #f3c66b;
+            background: rgba(255,255,255,.13);
+        }
+
+        .main {
+            min-width: 0;
+            padding: 24px 30px 50px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .topbar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .back-link {
+            padding: 10px 16px;
+            border: 1px solid #d5a94f;
+            border-radius: 8px;
+            color: #173d67;
+            text-decoration: none;
+        }
+
+        .hero {
+            margin-bottom: 20px;
+            padding: 23px;
+            border-radius: 14px;
+            color: white;
+            background: linear-gradient(
+                135deg,
+                #173c65,
+                #19578c
+            );
+        }
+
+        .hero h2 {
+            margin: 0 0 8px;
+            color: #f1c46c;
+        }
+
+        .hero p {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            padding: 23px;
+            border: 1px solid #dce4ee;
+            border-radius: 14px;
+            background: white;
+            box-shadow: 0 5px 18px
+                rgba(20,48,82,.06);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        input[type="file"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccd7e4;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .help {
+            margin: 8px 0 0;
+            color: #6d7d91;
+            font-size: 12px;
+        }
+
+        .check-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            padding: 14px;
+            border-radius: 9px;
+            background: #f5f8fc;
+        }
+
+        .check-row label {
+            margin: 0;
+            font-weight: normal;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 13px 22px;
+            border: 0;
+            border-radius: 8px;
+            color: white;
+            background: #1389c5;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background: #0874ab;
+        }
+
+        .button.download {
+            background: #22975e;
+        }
+
+        .notice {
+            margin-bottom: 18px;
+            padding: 13px 16px;
+            border-left: 4px solid #20a067;
+            border-radius: 7px;
+            background: #e9fff4;
+        }
+
+        .error {
+            border-left-color: #d14343;
+            background: #fff0f0;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .image-box {
+            overflow: hidden;
+            border: 1px solid #dce4ee;
+            border-radius: 12px;
+            background: #f5f7fa;
+        }
+
+        .image-box h3 {
+            margin: 0;
+            padding: 13px 16px;
+            background: #eef3f8;
+        }
+
+        .image-box img {
+            display: block;
+            width: 100%;
+            height: 430px;
+            object-fit: contain;
+            background: #dfe5eb;
+        }
+
+        .actions {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        @media (max-width: 850px) {
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .main {
+                padding: 18px;
+            }
+
+            .form-grid,
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .image-box img {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <h2>SyrMura <span>AI</span></h2>
+            <p>
+                Қызылорда облысының<br>
+                цифрлық архиві
+            </p>
+        </div>
+
+        <nav class="menu">
+            <a href="/">🏠 Басты бет</a>
+            <a href="/admin">📊 Басқару панелі</a>
+            <a href="/admin/upload">📥 Құжат жүктеу</a>
+
+<a href="/digitization">
+    <span class="menu-icon">📥</span>
+    <span>Құжатты цифрландыру</span>
+</a>
+
+            <a href="/ocr">🔠 OCR — мәтінді тану</a>
+
+<a href="/handwriting-recognition">
+    ✍️ Қолжазбаны тану
+</a>
+
+            <a href="/quality-check">📊 Сапаны бағалау</a>
+
+            <a
+                class="active"
+                href="/document-restoration"
+            >
+                🪄 Құжатты қалпына келтіру
+            </a>
+
+            <a href="/archive">📁 Мұрағат</a>
+            <a href="/admin/logout">🚪 Шығу</a>
+        </nav>
+    </aside>
+
+    <main class="main">
+
+        <div class="topbar">
+            <h1>Құжатты қалпына келтіру</h1>
+
+            <a class="back-link" href="/admin">
+                Басқару панелі
+            </a>
+        </div>
+
+        <section class="hero">
+            <h2>Ескі құжатты цифрлық өңдеу</h2>
+
+            <p>
+                Суреттің контрастын, жарығын және
+                анықтығын жақсартады. Бастапқы файл
+                өзгертілмейді.
+            </p>
+        </section>
+
+        {% with messages =
+            get_flashed_messages(
+                with_categories=true
+            )
+        %}
+            {% for category, message in messages %}
+                <div class="
+                    notice
+                    {% if category == 'error' %}
+                        error
+                    {% endif %}
+                ">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <section class="card">
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+            >
+                <input
+                    type="hidden"
+                    name="restoration_csrf"
+                    value="{{ restoration_csrf }}"
+                >
+
+                <div class="form-grid">
+
+                    <div class="field full">
+                        <label>
+                            Қалпына келтірілетін сурет
+                        </label>
+
+                        <input
+                            type="file"
+                            name="document_image"
+                            accept=".jpg,.jpeg,.png,.tif,.tiff"
+                            required
+                        >
+
+                        <p class="help">
+                            JPG, JPEG, PNG, TIFF.
+                            Ең үлкен көлемі — 25 МБ.
+                        </p>
+                    </div>
+
+                    <div class="field">
+                        <label>Өңдеу күші</label>
+
+                        <select name="strength">
+                            <option value="light">
+                                Жеңіл
+                            </option>
+
+                            <option
+                                value="medium"
+                                selected
+                            >
+                                Орташа
+                            </option>
+
+                            <option value="strong">
+                                Күшті
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Түс режимі</label>
+
+                        <select name="color_mode">
+                            <option value="original">
+                                Бастапқы түсті сақтау
+                            </option>
+
+                            <option value="grayscale">
+                                Ақ-қара құжат
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="field full">
+                        <label>Қолданылатын әрекеттер</label>
+
+                        <div class="check-row">
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    name="auto_contrast"
+                                    checked
+                                >
+                                Контраст
+                            </label>
+
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    name="denoise"
+                                    checked
+                                >
+                                Шуды азайту
+                            </label>
+
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    name="sharpen"
+                                    checked
+                                >
+                                Анықтық
+                            </label>
+
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    name="brightness"
+                                    checked
+                                >
+                                Жарық
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field full">
+                        <button class="button" type="submit">
+                            🪄 Қалпына келтіру
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        {% if original_url and restored_url %}
+            <section class="card">
+                <div class="comparison">
+
+                    <div class="image-box">
+                        <h3>Бастапқы сурет</h3>
+                        <img
+                            src="{{ original_url }}"
+                            alt="Бастапқы сурет"
+                        >
+                    </div>
+
+                    <div class="image-box">
+                        <h3>Өңделген сурет</h3>
+                        <img
+                            src="{{ restored_url }}"
+                            alt="Қалпына келтірілген сурет"
+                        >
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <a
+                        class="button download"
+                        href="{{ download_url }}"
+                    >
+                        ⬇️ Өңделген файлды жүктеу
+                    </a>
+                </div>
+            </section>
+        {% endif %}
+
+    </main>
+</div>
+</body>
+</html>

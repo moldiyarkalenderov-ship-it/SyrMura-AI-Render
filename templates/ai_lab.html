@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ЖИ зертхана — SyrMura AI</title>
+
+<style>
+* { box-sizing: border-box; }
+
+:root {
+    --sidebar: 285px;
+    --dark: #071d36;
+    --dark2: #12375d;
+    --gold: #efbd61;
+    --blue: #148fc8;
+    --background: #edf3f8;
+    --text: #11263e;
+}
+
+body {
+    margin: 0;
+    padding-left: var(--sidebar);
+    min-height: 100vh;
+    background: var(--background);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+}
+
+/* Сол жақ мәзір */
+.sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: var(--sidebar);
+    height: 100vh;
+    padding: 22px 18px;
+    overflow-y: auto;
+    color: white;
+    background: linear-gradient(180deg, var(--dark2), var(--dark));
+    z-index: 10000;
+}
+
+.sidebar .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 8px 20px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(255,255,255,.14);
+}
+
+.sidebar .brand-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    min-width: 48px;
+    height: 48px;
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    color: var(--gold);
+    font: 27px Georgia, serif;
+}
+
+.sidebar .brand h2 {
+    margin: 0;
+    color: white;
+    font-size: 21px;
+}
+
+.sidebar .brand h2 span { color: var(--gold); }
+
+.sidebar .brand p {
+    margin: 5px 0 0;
+    color: #a9bfd6;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.sidebar nav,
+.sidebar .side-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 48px;
+    padding: 11px 13px;
+    color: #edf5ff;
+    border-left: 3px solid transparent;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.sidebar a:hover {
+    color: var(--gold);
+    background: rgba(255,255,255,.10);
+}
+
+.sidebar a.active {
+    color: var(--gold);
+    background: rgba(255,255,255,.14);
+    border-left-color: var(--gold);
+}
+
+.sidebar .menu-icon {
+    display: inline-flex;
+    justify-content: center;
+    width: 24px;
+    min-width: 24px;
+}
+
+.sidebar .submenu { display: none !important; }
+
+/* Жоғарғы панель */
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 72px;
+    padding: 0 30px;
+    color: white;
+    background: var(--dark);
+}
+
+.topbar h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.back-button {
+    padding: 10px 15px;
+    color: #173753;
+    background: white;
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.container {
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 27px;
+}
+
+.hero {
+    padding: 28px;
+    margin-bottom: 20px;
+    color: white;
+    background: linear-gradient(135deg, #113e69, #1674aa);
+    border-radius: 16px;
+}
+
+.hero h1 {
+    margin: 0 0 10px;
+    color: var(--gold);
+    font-size: 29px;
+}
+
+.hero p {
+    max-width: 850px;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.statistics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 13px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    padding: 17px;
+    background: white;
+    border: 1px solid #dbe5ef;
+    border-radius: 12px;
+}
+
+.stat-number {
+    color: #144c78;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.stat-label {
+    margin-top: 5px;
+    color: #718096;
+    font-size: 12px;
+}
+
+/* Зертхана батырмалары */
+.lab-tabs {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 9px;
+    margin-bottom: 18px;
+}
+
+.lab-tab {
+    min-height: 65px;
+    padding: 10px;
+    color: #183b59;
+    background: white;
+    border: 1px solid #d5e0eb;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.lab-tab:hover,
+.lab-tab.active {
+    color: white;
+    background: #157fae;
+    border-color: #157fae;
+}
+
+.lab-panel {
+    display: none;
+    padding: 23px;
+    background: white;
+    border: 1px solid #dce5ee;
+    border-radius: 14px;
+    box-shadow: 0 7px 20px rgba(13,37,65,.06);
+}
+
+.lab-panel.active { display: block; }
+
+.lab-panel h2 {
+    margin: 0 0 8px;
+    color: #143d62;
+}
+
+.help-text {
+    margin: 0 0 20px;
+    color: #687a90;
+    line-height: 1.5;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.form-row.two {
+    grid-template-columns: 1fr auto;
+}
+
+select,
+input {
+    width: 100%;
+    min-height: 45px;
+    padding: 10px 13px;
+    border: 1px solid #cad7e4;
+    border-radius: 8px;
+    outline: none;
+}
+
+select:focus,
+input:focus {
+    border-color: var(--blue);
+}
+
+.action-button {
+    min-height: 45px;
+    padding: 0 20px;
+    color: white;
+    background: var(--blue);
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.result-area {
+    min-height: 100px;
+    padding: 18px;
+    background: #f5f8fb;
+    border: 1px solid #dce6ef;
+    border-radius: 10px;
+}
+
+.comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.document-box {
+    padding: 17px;
+    background: white;
+    border: 1px solid #d8e3ed;
+    border-radius: 10px;
+}
+
+.document-box h3 {
+    margin: 0 0 10px;
+    color: #153f66;
+}
+
+.document-box p {
+    margin: 7px 0;
+    line-height: 1.5;
+}
+
+.badge {
+    display: inline-block;
+    padding: 5px 9px;
+    margin: 3px;
+    color: #215477;
+    background: #e5f1f8;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.result-list {
+    display: grid;
+    gap: 9px;
+}
+
+.result-item {
+    padding: 13px;
+    background: white;
+    border-left: 4px solid #1689be;
+    border-radius: 8px;
+}
+
+.bar-row {
+    display: grid;
+    grid-template-columns: 180px 1fr 45px;
+    gap: 10px;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.bar-track {
+    height: 13px;
+    overflow: hidden;
+    background: #dfe9f1;
+    border-radius: 10px;
+}
+
+.bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1689be, #e0aa45);
+    border-radius: 10px;
+}
+
+.empty {
+    padding: 25px;
+    text-align: center;
+    color: #77879a;
+}
+
+@media (max-width: 1050px) {
+    .lab-tabs { grid-template-columns: 1fr 1fr; }
+    .statistics { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 800px) {
+    :root { --sidebar: 235px; }
+
+    .form-row,
+    .comparison-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<!-- MODE SWITCH STYLE START -->
+<style>
+    .sidebar .mode-switch-divider {
+        flex: 0 0 auto !important;
+        width: calc(100% - 16px) !important;
+        height: 1px !important;
+        margin: 15px 8px 9px !important;
+        background: rgba(255,255,255,0.17) !important;
+    }
+
+    .sidebar .mode-switch-link {
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 11px !important;
+
+        width: 100% !important;
+        min-height: 48px !important;
+        padding: 10px 12px !important;
+        margin: 0 !important;
+
+        color: #f5d792 !important;
+        background: rgba(239,189,97,0.09) !important;
+
+        border: 1px solid rgba(239,189,97,0.25) !important;
+        border-left: 3px solid #efbd61 !important;
+        border-radius: 9px !important;
+
+        text-decoration: none !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        line-height: 1.25 !important;
+
+        box-sizing: border-box !important;
+        transition:
+            background 0.12s ease,
+            color 0.12s ease,
+            transform 0.08s ease,
+            box-shadow 0.08s ease !important;
+    }
+
+    .sidebar .mode-switch-link:hover {
+        color: #ffffff !important;
+        background: rgba(239,189,97,0.20) !important;
+    }
+
+    .sidebar .mode-switch-link:active {
+        color: #ffffff !important;
+        background: #b68129 !important;
+        transform: translateY(3px) !important;
+        box-shadow:
+            inset 0 3px 7px rgba(0,0,0,0.30) !important;
+    }
+
+    .sidebar .mode-switch-link .menu-icon {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 24px !important;
+        min-width: 24px !important;
+    }
+
+    .sidebar .admin-mode-link {
+        color: #ffd98b !important;
+        background: rgba(210,145,32,0.13) !important;
+    }
+
+    .sidebar .user-mode-link {
+        color: #bfe3fa !important;
+        background: rgba(61,154,207,0.12) !important;
+        border-color: rgba(89,184,231,0.30) !important;
+        border-left-color: #5db8e5 !important;
+    }
+
+    .sidebar .user-mode-link:hover {
+        background: rgba(61,154,207,0.24) !important;
+    }
+</style>
+<!-- MODE SWITCH STYLE END -->
+
+
+<!-- PERSISTENT KEY STYLE START -->
+<style>
+    /*
+       Барлық мәзір батырмасының негізгі өлшемі.
+       Таңдалған кезде көрші батырмалар қозғалмайды.
+    */
+    .sidebar nav a,
+    .sidebar .side-menu a {
+        position: relative !important;
+        box-sizing: border-box !important;
+
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        min-height: 48px !important;
+
+        margin: 0 !important;
+        padding: 10px 12px !important;
+
+        border: 1px solid transparent !important;
+        border-left: 3px solid transparent !important;
+        border-radius: 9px !important;
+
+        transform: translateY(0) !important;
+
+        transition:
+            color 0.12s ease,
+            background-color 0.12s ease,
+            border-color 0.12s ease,
+            box-shadow 0.10s ease,
+            transform 0.08s ease !important;
+    }
+
+    /*
+       Басылып таңдалған және сол күйде сақталатын батырма
+    */
+    .sidebar nav a.key-selected,
+    .sidebar .side-menu a.key-selected,
+    .sidebar nav a.active,
+    .sidebar .side-menu a.active {
+        color: #ffffff !important;
+        background:
+            linear-gradient(
+                180deg,
+                #bd8932 0%,
+                #95651f 100%
+            ) !important;
+
+        border-color: #d7a84f !important;
+        border-left-color: #ffe2a0 !important;
+
+        /*
+           Батырма перне сияқты ішке басылып тұрады.
+           Transform басқа батырмалардың орнын өзгертпейді.
+        */
+        transform: translateY(2px) !important;
+
+        box-shadow:
+            inset 0 4px 8px rgba(0,0,0,0.33),
+            inset 0 -1px 1px rgba(255,255,255,0.12),
+            0 1px 0 rgba(255,255,255,0.10) !important;
+
+        font-weight: 700 !important;
+    }
+
+    /*
+       Таңдалған перненің сол жағындағы жарық белгі
+    */
+    .sidebar nav a.key-selected::before,
+    .sidebar .side-menu a.key-selected::before,
+    .sidebar nav a.active::before,
+    .sidebar .side-menu a.active::before {
+        content: "" !important;
+        position: absolute !important;
+        left: -3px !important;
+        top: 8px !important;
+        bottom: 8px !important;
+        width: 3px !important;
+
+        background: #ffe09a !important;
+        border-radius: 0 4px 4px 0 !important;
+        box-shadow: 0 0 8px rgba(255,216,128,0.65) !important;
+    }
+
+    /*
+       Тінтуір дәл басылып тұрған сәттегі терең әсер
+    */
+    .sidebar nav a:active,
+    .sidebar .side-menu a:active,
+    .sidebar nav a.key-pressing,
+    .sidebar .side-menu a.key-pressing {
+        color: #ffffff !important;
+        background: #7f5318 !important;
+        border-color: #69400f !important;
+        border-left-color: #fff0be !important;
+
+        transform: translateY(4px) !important;
+
+        box-shadow:
+            inset 0 6px 10px rgba(0,0,0,0.43),
+            0 0 0 1px rgba(255,255,255,0.04) !important;
+    }
+
+    .sidebar nav a.key-selected .menu-icon,
+    .sidebar .side-menu a.key-selected .menu-icon,
+    .sidebar nav a.active .menu-icon,
+    .sidebar .side-menu a.active .menu-icon {
+        filter:
+            brightness(1.15)
+            drop-shadow(0 1px 1px rgba(0,0,0,0.25));
+    }
+
+    /*
+       Режим ауыстыру батырмалары да дәл солай белгіленеді
+    */
+    .sidebar a.mode-switch-link.key-selected {
+        color: #ffffff !important;
+        background:
+            linear-gradient(
+                180deg,
+                #258abb,
+                #176386
+            ) !important;
+
+        border-color: #63bce5 !important;
+        border-left-color: #c7edff !important;
+
+        box-shadow:
+            inset 0 4px 8px rgba(0,0,0,0.30),
+            0 1px 0 rgba(255,255,255,0.10) !important;
+    }
+
+    .sidebar nav a:focus-visible,
+    .sidebar .side-menu a:focus-visible {
+        outline: 2px solid #ffe09a !important;
+        outline-offset: 2px !important;
+    }
+</style>
+<!-- PERSISTENT KEY STYLE END -->
+
+
+<!-- ZERO MOVEMENT MENU FIX START -->
+<style>
+    /*
+       Мәзірдің барлық батырмасы бірдей тұрақты өлшемде.
+    */
+    .sidebar nav,
+    .sidebar .side-menu {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 5px !important;
+        width: 100% !important;
+    }
+
+    .sidebar nav > a,
+    .sidebar .side-menu > a,
+    .sidebar nav > a:hover,
+    .sidebar .side-menu > a:hover,
+    .sidebar nav > a:active,
+    .sidebar .side-menu > a:active,
+    .sidebar nav > a.active,
+    .sidebar .side-menu > a.active,
+    .sidebar nav > a.key-selected,
+    .sidebar .side-menu > a.key-selected,
+    .sidebar nav > a.key-pressing,
+    .sidebar .side-menu > a.key-pressing {
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        flex: 0 0 48px !important;
+        gap: 11px !important;
+
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+
+        height: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+
+        padding: 10px 12px !important;
+        margin: 0 !important;
+
+        border-width: 1px 1px 1px 3px !important;
+        border-style: solid !important;
+        border-radius: 9px !important;
+
+        box-sizing: border-box !important;
+
+        /*
+           Ешқандай бағытта қозғалмайды.
+        */
+        transform: none !important;
+        translate: none !important;
+        scale: 1 !important;
+
+        line-height: 1.25 !important;
+        text-decoration: none !important;
+    }
+
+    /*
+       Қалыпты батырма
+    */
+    .sidebar nav > a,
+    .sidebar .side-menu > a {
+        color: #eaf3fc !important;
+        background: transparent !important;
+        border-color: transparent !important;
+    }
+
+    /*
+       Тінтуірді апарғандағы әсер.
+       Өлшемі мен орны өзгермейді.
+    */
+    .sidebar nav > a:hover,
+    .sidebar .side-menu > a:hover {
+        color: #efbd61 !important;
+        background: rgba(255,255,255,0.09) !important;
+        border-color:
+            rgba(239,189,97,0.22)
+            rgba(239,189,97,0.22)
+            rgba(239,189,97,0.22)
+            #efbd61 !important;
+
+        transform: none !important;
+    }
+
+    /*
+       Таңдалған батырма.
+       Перне басылғандай көрінеді, бірақ қозғалмайды.
+    */
+    .sidebar nav > a.active,
+    .sidebar .side-menu > a.active,
+    .sidebar nav > a.key-selected,
+    .sidebar .side-menu > a.key-selected {
+        color: #ffffff !important;
+
+        background:
+            linear-gradient(
+                180deg,
+                #b9822c 0%,
+                #91601c 100%
+            ) !important;
+
+        border-color:
+            #d8a74d
+            #d8a74d
+            #70450e
+            #ffe09a !important;
+
+        transform: none !important;
+
+        box-shadow:
+            inset 0 4px 8px rgba(0,0,0,0.34),
+            inset 0 -1px 1px rgba(255,255,255,0.10),
+            0 0 0 1px rgba(255,224,154,0.05) !important;
+
+        font-weight: 700 !important;
+    }
+
+    /*
+       Тінтуір нақты басылып тұрған қысқа сәт.
+       Бұл кезде де қозғалыс болмайды.
+    */
+    .sidebar nav > a:active,
+    .sidebar .side-menu > a:active,
+    .sidebar nav > a.key-pressing,
+    .sidebar .side-menu > a.key-pressing {
+        color: #ffffff !important;
+        background: #75470f !important;
+
+        border-color:
+            #5b3308
+            #5b3308
+            #452400
+            #fff0bd !important;
+
+        transform: none !important;
+
+        box-shadow:
+            inset 0 6px 11px rgba(0,0,0,0.48) !important;
+    }
+
+    /*
+       Бұрынғы ::before белгісі де өлшемге әсер етпейді.
+    */
+    .sidebar nav > a::before,
+    .sidebar .side-menu > a::before {
+        box-sizing: border-box !important;
+        pointer-events: none !important;
+    }
+
+    /*
+       Белгіше мен мәтін орны тұрақты.
+    */
+    .sidebar nav > a .menu-icon,
+    .sidebar .side-menu > a .menu-icon {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 0 0 24px !important;
+
+        width: 24px !important;
+        min-width: 24px !important;
+        max-width: 24px !important;
+
+        height: 24px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .sidebar nav > a span:last-child,
+    .sidebar .side-menu > a span:last-child {
+        flex: 1 1 auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /*
+       Режим ауыстыру батырмалары да қозғалмайды.
+    */
+    .sidebar a.mode-switch-link,
+    .sidebar a.mode-switch-link:hover,
+    .sidebar a.mode-switch-link:active,
+    .sidebar a.mode-switch-link.key-selected {
+        height: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+        padding: 10px 12px !important;
+        margin: 0 !important;
+        transform: none !important;
+    }
+</style>
+<!-- ZERO MOVEMENT MENU FIX END -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- STATIC ACTIVE MENU START -->
+<style>
+    /*
+       Барлық әкімші батырмасы тұрақты қалыпта болады.
+    */
+    .sidebar nav > a,
+    .sidebar .side-menu > a,
+    .sidebar nav > a:hover,
+    .sidebar .side-menu > a:hover,
+    .sidebar nav > a:active,
+    .sidebar .side-menu > a:active,
+    .sidebar nav > a.active,
+    .sidebar .side-menu > a.active,
+    .sidebar nav > a.key-selected,
+    .sidebar .side-menu > a.key-selected,
+    .sidebar nav > a.key-pressing,
+    .sidebar .side-menu > a.key-pressing {
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        flex: 0 0 46px !important;
+        gap: 10px !important;
+
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+
+        height: 46px !important;
+        min-height: 46px !important;
+        max-height: 46px !important;
+
+        padding: 9px 11px !important;
+        margin: 0 !important;
+
+        border-width: 0 0 0 3px !important;
+        border-style: solid !important;
+        border-color: transparent !important;
+        border-radius: 8px !important;
+
+        box-sizing: border-box !important;
+
+        /*
+           Ешқандай секіру, жылжу және анимация болмайды.
+        */
+        transform: none !important;
+        translate: none !important;
+        scale: 1 !important;
+        transition: none !important;
+        animation: none !important;
+
+        box-shadow: none !important;
+        text-decoration: none !important;
+    }
+
+    /*
+       Қалыпты батырма.
+    */
+    .sidebar nav > a,
+    .sidebar .side-menu > a {
+        color: #edf4fb !important;
+        background: transparent !important;
+        border-left-color: transparent !important;
+        font-weight: 400 !important;
+    }
+
+    /*
+       Тінтуірді апарғанда ғана жеңіл фон.
+    */
+    .sidebar nav > a:hover,
+    .sidebar .side-menu > a:hover {
+        color: #f2c66e !important;
+        background: rgba(255,255,255,0.07) !important;
+        border-left-color: rgba(242,198,110,0.45) !important;
+
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    /*
+       Ашық тұрған бөлім:
+       қызғылт сары толық фон болмайды.
+    */
+    .sidebar nav > a.active,
+    .sidebar .side-menu > a.active,
+    .sidebar nav > a.key-selected,
+    .sidebar .side-menu > a.key-selected {
+        color: #f4c96e !important;
+
+        background: rgba(255,255,255,0.12) !important;
+
+        border-left-color: #efbd61 !important;
+
+        transform: none !important;
+        box-shadow: none !important;
+
+        font-weight: 600 !important;
+    }
+
+    /*
+       Басып тұрған сәтте де батырма орнынан қозғалмайды.
+    */
+    .sidebar nav > a:active,
+    .sidebar .side-menu > a:active,
+    .sidebar nav > a.key-pressing,
+    .sidebar .side-menu > a.key-pressing {
+        color: #ffffff !important;
+        background: rgba(255,255,255,0.16) !important;
+        border-left-color: #ffe0a0 !important;
+
+        transform: none !important;
+        box-shadow:
+            inset 0 2px 5px rgba(0,0,0,0.22) !important;
+    }
+
+    /*
+       Бұрынғы алтын ::before белгісін өшіру.
+    */
+    .sidebar nav > a::before,
+    .sidebar .side-menu > a::before {
+        display: none !important;
+        content: none !important;
+    }
+
+    /*
+       Белгіше орны да тұрақты.
+    */
+    .sidebar nav > a .menu-icon,
+    .sidebar .side-menu > a .menu-icon {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 0 0 24px !important;
+
+        width: 24px !important;
+        min-width: 24px !important;
+        max-width: 24px !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /*
+       Режим ауыстыру батырмасы тұрақты көк түсте.
+    */
+    .sidebar a.mode-switch-link,
+    .sidebar a.mode-switch-link:hover,
+    .sidebar a.mode-switch-link:active,
+    .sidebar a.mode-switch-link.active,
+    .sidebar a.mode-switch-link.key-selected {
+        color: #c6e8fa !important;
+        background: rgba(50,145,198,0.12) !important;
+        border-left-color: #55acd8 !important;
+
+        transform: none !important;
+        transition: none !important;
+        animation: none !important;
+        box-shadow: none !important;
+    }
+</style>
+<!-- STATIC ACTIVE MENU END -->
+
+</head>
+
+<body>
+
+<aside class="sidebar">
+<div class="brand">
+<div class="brand-icon">S</div>
+<div>
+<h2>SyrMura <span>AI</span></h2>
+<p>Қызылорда облысының<br/>цифрлық архиві</p>
+</div>
+</div>
+<nav class="side-menu">
+<a class="" href="/">
+<span class="menu-icon">🏠</span>
+<span>Басты бет</span>
+</a>
+<a class="main-section-link" href="/archive">
+<span class="menu-icon">🗂️</span>
+<span>Цифрлық архив</span>
+</a>
+<a class="main-section-link" href="/smart-search">
+<span class="menu-icon">🔎</span>
+<span>Ақылды іздеу</span>
+</a>
+<a class="" href="/timeline">
+<span class="menu-icon">🕒</span>
+<span>Уақыт желісі</span>
+</a>
+<a class="" href="/archive-map">
+<span class="menu-icon">🗺️</span>
+<span>Архив картасы</span>
+</a>
+<a class="main-section-link active" href="/ai-lab">
+<span class="menu-icon">🧪</span>
+<span>ЖИ зертхана</span>
+</a>
+<a class="" href="/virtual-exhibition">
+<span class="menu-icon">🏛️</span>
+<span>Виртуалды көрме</span>
+</a>
+<a class="" href="/qr-gallery">
+<span class="menu-icon">▦</span>
+<span>QR-кодтар</span>
+</a>
+<!-- SYRMURA_OCR_MENU_START -->
+<!-- SYRMURA_OCR_MENU_END -->
+<!-- SYRMURA_QUALITY_MENU_START -->
+<!-- SYRMURA_QUALITY_MENU_END -->
+
+<!-- USER TO ADMIN MODE START -->
+{% if
+    session.get("user_role") == "admin"
+    or session.get("is_admin")
+    or session.get("admin_logged_in")
+%}
+    <div class="mode-switch-divider"></div>
+
+    <a href="/admin"
+       class="mode-switch-link admin-mode-link">
+        <span class="menu-icon">🔐</span>
+        <span>Әкімші режиміне өту</span>
+    </a>
+{% endif %}
+<!-- USER TO ADMIN MODE END -->
+
+</nav>
+<div class="sidebar-bottom">
+<a class="admin-link" href="/admin/login">🔐 Әкімшіге кіру</a>
+<p>© 2026 SyrMura AI</p>
+</div>
+</aside>
+
+<header class="topbar">
+    <h2>🧪 ЖИ зертхана</h2>
+
+    <button class="back-button"
+            onclick="history.length > 1 ? history.back() : location.href='/'">
+        ← Кері қайту
+    </button>
+</header>
+
+<main class="container">
+
+<section class="hero">
+    <h1>Архивтік виртуалды зертхана</h1>
+    <p>
+        Жарияланған архив құжаттарын салыстырыңыз,
+        уақытын, тақырыбын, дереккөзін және географиялық
+        орнын интерактивті құралдар арқылы зерттеңіз.
+    </p>
+</section>
+
+<section class="statistics">
+    <div class="stat-card">
+        <div class="stat-number" id="totalDocuments">0</div>
+        <div class="stat-label">Жарияланған құжат</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-number" id="totalYears">0</div>
+        <div class="stat-label">Тарихи жыл</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-number" id="totalSources">0</div>
+        <div class="stat-label">Дереккөз</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-number" id="totalLocations">0</div>
+        <div class="stat-label">Географиялық орын</div>
+    </div>
+</section>
+
+<nav class="lab-tabs">
+    <button class="lab-tab active" data-panel="comparison">
+        ⚖️ Құжаттарды салыстыру
+    </button>
+
+    <button class="lab-tab" data-panel="timelineLab">
+        🕰️ Уақыт зертханасы
+    </button>
+
+    <button class="lab-tab" data-panel="keywordLab">
+        🔤 Кілт сөз зертханасы
+    </button>
+
+    <button class="lab-tab" data-panel="sourceLab">
+        🏛️ Дереккөздер
+    </button>
+
+    <button class="lab-tab" data-panel="geoLab">
+        🗺️ География
+    </button>
+</nav>
+
+<!-- 1. Салыстыру -->
+<section id="comparison" class="lab-panel active">
+    <h2>⚖️ Құжаттарды салыстыру</h2>
+    <p class="help-text">
+        Екі архив материалын таңдап, олардың жылы,
+        бөлімі, дереккөзі және сипаттамасын салыстырыңыз.
+    </p>
+
+    <div class="form-row">
+        <select id="documentA"></select>
+        <select id="documentB"></select>
+
+        <button class="action-button"
+                onclick="compareDocuments()">
+            Салыстыру
+        </button>
+    </div>
+
+    <div id="comparisonResult" class="result-area"></div>
+</section>
+
+<!-- 2. Уақыт -->
+<section id="timelineLab" class="lab-panel">
+    <h2>🕰️ Уақыт зертханасы</h2>
+    <p class="help-text">
+        Құжаттарды жылдар бойынша реттеп,
+        белгілі бір уақыт аралығын зерттеңіз.
+    </p>
+
+    <div class="form-row">
+        <input id="startYear" type="number"
+               placeholder="Бастапқы жыл">
+
+        <input id="endYear" type="number"
+               placeholder="Соңғы жыл">
+
+        <button class="action-button"
+                onclick="analyseTimeline()">
+            Талдау
+        </button>
+    </div>
+
+    <div id="timelineResult" class="result-area"></div>
+</section>
+
+<!-- 3. Кілт сөз -->
+<section id="keywordLab" class="lab-panel">
+    <h2>🔤 Кілт сөз зертханасы</h2>
+    <p class="help-text">
+        Белгілі бір атау, тұлға, жер немесе оқиға
+        архивте қанша рет кездесетінін анықтаңыз.
+    </p>
+
+    <div class="form-row two">
+        <input id="keywordInput"
+               type="search"
+               placeholder="Мысалы: Перовск, Ақмешіт, сауда">
+
+        <button class="action-button"
+                onclick="analyseKeyword()">
+            Зерттеу
+        </button>
+    </div>
+
+    <div id="keywordResult" class="result-area"></div>
+</section>
+
+<!-- 4. Дереккөз -->
+<section id="sourceLab" class="lab-panel">
+    <h2>🏛️ Дереккөздерді талдау</h2>
+    <p class="help-text">
+        Архив материалдарының қандай мекемелер мен
+        қорлардан алынғанын салыстырыңыз.
+    </p>
+
+    <button class="action-button"
+            onclick="analyseSources()">
+        Дереккөздерді талдау
+    </button>
+
+    <div id="sourceResult"
+         class="result-area"
+         style="margin-top:18px"></div>
+</section>
+
+<!-- 5. География -->
+<section id="geoLab" class="lab-panel">
+    <h2>🗺️ Географиялық зерттеу</h2>
+    <p class="help-text">
+        Географиялық орны көрсетілген архив
+        материалдарын зерттеңіз.
+    </p>
+
+    <button class="action-button"
+            onclick="analyseLocations()">
+        Орындарды көрсету
+    </button>
+
+    <div id="geoResult"
+         class="result-area"
+         style="margin-top:18px"></div>
+</section>
+
+</main>
+
+<script>
+const documents = {{ documents_json | safe }};
+
+function safe(value) {
+    const element = document.createElement("div");
+    element.textContent = value ?? "";
+    return element.innerHTML;
+}
+
+function documentText(doc) {
+    return [
+        doc.title,
+        doc.document_year,
+        doc.section,
+        doc.subsection,
+        doc.description,
+        doc.source_name,
+        doc.location_name
+    ].filter(Boolean).join(" ").toLowerCase();
+}
+
+function initialise() {
+    document.getElementById("totalDocuments").textContent =
+        documents.length;
+
+    const years = new Set(
+        documents
+            .map(doc => doc.document_year)
+            .filter(Boolean)
+    );
+
+    const sources = new Set(
+        documents
+            .map(doc => doc.source_name)
+            .filter(Boolean)
+    );
+
+    const locations = new Set(
+        documents
+            .map(doc => doc.location_name)
+            .filter(Boolean)
+    );
+
+    document.getElementById("totalYears").textContent =
+        years.size;
+
+    document.getElementById("totalSources").textContent =
+        sources.size;
+
+    document.getElementById("totalLocations").textContent =
+        locations.size;
+
+    const selects = [
+        document.getElementById("documentA"),
+        document.getElementById("documentB")
+    ];
+
+    selects.forEach((select, selectIndex) => {
+        select.innerHTML =
+            '<option value="">Құжатты таңдаңыз</option>';
+
+        documents.forEach((doc, index) => {
+            const option = document.createElement("option");
+            option.value = index;
+            option.textContent =
+                `${doc.document_year || "Жылы жоқ"} — ${doc.title}`;
+
+            select.appendChild(option);
+        });
+
+        if (documents.length > selectIndex) {
+            select.value = selectIndex;
+        }
+    });
+
+    if (documents.length >= 2) {
+        compareDocuments();
+    } else {
+        document.getElementById("comparisonResult").innerHTML =
+            '<div class="empty">Салыстыру үшін кемінде екі құжат қажет.</div>';
+    }
+}
+
+document.querySelectorAll(".lab-tab").forEach(button => {
+    button.addEventListener("click", () => {
+        document.querySelectorAll(".lab-tab")
+            .forEach(item => item.classList.remove("active"));
+
+        document.querySelectorAll(".lab-panel")
+            .forEach(item => item.classList.remove("active"));
+
+        button.classList.add("active");
+
+        document
+            .getElementById(button.dataset.panel)
+            .classList.add("active");
+    });
+});
+
+function documentBox(doc, label) {
+    return `
+        <div class="document-box">
+            <span class="badge">${safe(label)}</span>
+            <h3>${safe(doc.title)}</h3>
+            <p><strong>Жылы:</strong>
+                ${safe(doc.document_year || "Көрсетілмеген")}
+            </p>
+            <p><strong>Бөлімі:</strong>
+                ${safe(doc.section || "Көрсетілмеген")}
+            </p>
+            <p><strong>Бөлімшесі:</strong>
+                ${safe(doc.subsection || "Көрсетілмеген")}
+            </p>
+            <p><strong>Дереккөзі:</strong>
+                ${safe(doc.source_name || "Көрсетілмеген")}
+            </p>
+            <p><strong>Сипаттамасы:</strong><br>
+                ${safe(doc.description || "Сипаттамасы жоқ")}
+            </p>
+        </div>
+    `;
+}
+
+function compareDocuments() {
+    const firstValue =
+        document.getElementById("documentA").value;
+
+    const secondValue =
+        document.getElementById("documentB").value;
+
+    const result =
+        document.getElementById("comparisonResult");
+
+    if (firstValue === "" || secondValue === "") {
+        result.innerHTML =
+            '<div class="empty">Екі құжатты таңдаңыз.</div>';
+        return;
+    }
+
+    const first = documents[Number(firstValue)];
+    const second = documents[Number(secondValue)];
+
+    let difference = "Жыл айырмасы анықталмады";
+
+    if (first.document_year && second.document_year) {
+        difference =
+            Math.abs(
+                Number(first.document_year) -
+                Number(second.document_year)
+            ) + " жыл айырмашылық";
+    }
+
+    result.innerHTML = `
+        <p><strong>Уақыттық салыстыру:</strong>
+            ${safe(difference)}
+        </p>
+
+        <div class="comparison-grid">
+            ${documentBox(first, "Бірінші құжат")}
+            ${documentBox(second, "Екінші құжат")}
+        </div>
+    `;
+}
+
+function analyseTimeline() {
+    const start =
+        Number(document.getElementById("startYear").value);
+
+    const end =
+        Number(document.getElementById("endYear").value);
+
+    let filtered = documents
+        .filter(doc => doc.document_year)
+        .sort(
+            (a, b) =>
+                Number(a.document_year) -
+                Number(b.document_year)
+        );
+
+    if (start) {
+        filtered = filtered.filter(
+            doc => Number(doc.document_year) >= start
+        );
+    }
+
+    if (end) {
+        filtered = filtered.filter(
+            doc => Number(doc.document_year) <= end
+        );
+    }
+
+    const result =
+        document.getElementById("timelineResult");
+
+    if (!filtered.length) {
+        result.innerHTML =
+            '<div class="empty">Бұл аралықта құжат табылмады.</div>';
+        return;
+    }
+
+    result.innerHTML = `
+        <p><strong>${filtered.length}</strong> материал табылды.</p>
+        <div class="result-list">
+            ${filtered.map(doc => `
+                <div class="result-item">
+                    <strong>${safe(doc.document_year)}</strong>
+                    — ${safe(doc.title)}
+                </div>
+            `).join("")}
+        </div>
+    `;
+}
+
+function analyseKeyword() {
+    const keyword =
+        document.getElementById("keywordInput")
+            .value.trim().toLowerCase();
+
+    const result =
+        document.getElementById("keywordResult");
+
+    if (!keyword) {
+        result.innerHTML =
+            '<div class="empty">Зерттелетін сөзді жазыңыз.</div>';
+        return;
+    }
+
+    const matches = documents.filter(
+        doc => documentText(doc).includes(keyword)
+    );
+
+    result.innerHTML = `
+        <p>
+            <strong>«${safe(keyword)}»</strong> сөзі
+            ${matches.length} құжаттан табылды.
+        </p>
+
+        <div class="result-list">
+            ${matches.length
+                ? matches.map(doc => `
+                    <div class="result-item">
+                        <strong>${safe(doc.title)}</strong><br>
+                        <span>
+                            ${safe(doc.document_year || "")}
+                            ${safe(doc.source_name || "")}
+                        </span>
+                    </div>
+                `).join("")
+                : '<div class="empty">Сәйкес материал табылмады.</div>'
+            }
+        </div>
+    `;
+}
+
+function analyseSources() {
+    const counts = {};
+
+    documents.forEach(doc => {
+        const source =
+            doc.source_name || "Дереккөзі көрсетілмеген";
+
+        counts[source] = (counts[source] || 0) + 1;
+    });
+
+    const entries = Object.entries(counts)
+        .sort((a, b) => b[1] - a[1]);
+
+    const maximum = entries.length
+        ? entries[0][1]
+        : 1;
+
+    const result =
+        document.getElementById("sourceResult");
+
+    if (!entries.length) {
+        result.innerHTML =
+            '<div class="empty">Дереккөз мәліметі жоқ.</div>';
+        return;
+    }
+
+    result.innerHTML = entries.map(([source, count]) => `
+        <div class="bar-row">
+            <span>${safe(source)}</span>
+
+            <div class="bar-track">
+                <div class="bar-fill"
+                     style="width:${(count / maximum) * 100}%">
+                </div>
+            </div>
+
+            <strong>${count}</strong>
+        </div>
+    `).join("");
+}
+
+function analyseLocations() {
+    const located = documents.filter(
+        doc => doc.location_name
+    );
+
+    const result =
+        document.getElementById("geoResult");
+
+    if (!located.length) {
+        result.innerHTML =
+            '<div class="empty">Орны көрсетілген материал жоқ.</div>';
+        return;
+    }
+
+    result.innerHTML = `
+        <p>
+            Географиялық орны бар
+            <strong>${located.length}</strong> материал табылды.
+        </p>
+
+        <div class="result-list">
+            ${located.map(doc => `
+                <div class="result-item">
+                    <strong>📍 ${safe(doc.location_name)}</strong><br>
+                    ${safe(doc.title)}
+                    ${
+                        doc.latitude && doc.longitude
+                        ? `<br><small>
+                            ${safe(doc.latitude)},
+                            ${safe(doc.longitude)}
+                           </small>`
+                        : ""
+                    }
+                </div>
+            `).join("")}
+        </div>
+    `;
+}
+
+initialise();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- STATIC ACTIVE MENU SCRIPT START -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const links = Array.from(
+        document.querySelectorAll(
+            ".sidebar nav a, .sidebar .side-menu a"
+        )
+    );
+
+    const currentPath = (
+        window.location.pathname.replace(/\/+$/, "")
+        || "/"
+    );
+
+    /*
+       Бұрын localStorage ішінде сақталған ауыспалы
+       қызғылт сары батырманы тазалау.
+    */
+    try {
+        localStorage.removeItem(
+            "syrmura_admin_selected_key"
+        );
+
+        localStorage.removeItem(
+            "syrmura_public_selected_key"
+        );
+    } catch (error) {
+        // localStorage жабық болса, өткізіледі
+    }
+
+    links.forEach(function (link) {
+        link.classList.remove(
+            "active",
+            "key-selected",
+            "key-pressing",
+            "menu-pressed"
+        );
+
+        link.removeAttribute("aria-current");
+    });
+
+    function pathOf(link) {
+        try {
+            return (
+                new URL(
+                    link.href,
+                    window.location.origin
+                ).pathname.replace(/\/+$/, "")
+                || "/"
+            );
+        } catch (error) {
+            return "";
+        }
+    }
+
+    let selectedLink = null;
+    let bestLength = -1;
+
+    links.forEach(function (link) {
+        const linkPath = pathOf(link);
+
+        const exactMatch =
+            linkPath === currentPath;
+
+        const childMatch =
+            linkPath !== "/"
+            && currentPath.startsWith(linkPath + "/");
+
+        if (
+            (exactMatch || childMatch)
+            && linkPath.length > bestLength
+        ) {
+            selectedLink = link;
+            bestLength = linkPath.length;
+        }
+    });
+
+    if (selectedLink) {
+        selectedLink.classList.add("active");
+        selectedLink.setAttribute(
+            "aria-current",
+            "page"
+        );
+    }
+
+    /*
+       Басылған сәтте қысқа ішкі көлеңке ғана көрсетіледі.
+       Класс жаңа бет ашылар алдында жойылады.
+    */
+    links.forEach(function (link) {
+        link.addEventListener(
+            "pointerdown",
+            function () {
+                link.classList.add("key-pressing");
+            }
+        );
+
+        link.addEventListener(
+            "pointerup",
+            function () {
+                link.classList.remove("key-pressing");
+            }
+        );
+
+        link.addEventListener(
+            "pointerleave",
+            function () {
+                link.classList.remove("key-pressing");
+            }
+        );
+    });
+});
+</script>
+<!-- STATIC ACTIVE MENU SCRIPT END -->
+
+</body>
+</html>

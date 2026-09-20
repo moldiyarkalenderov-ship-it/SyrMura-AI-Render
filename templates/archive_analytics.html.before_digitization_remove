@@ -1,0 +1,562 @@
+
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Архив аналитикасы — SyrMura AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            color: #10233e;
+            background: #f1f4f8;
+            font-family: Arial, sans-serif;
+        }
+
+        .layout {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            flex: 0 0 250px;
+            width: 250px;
+            padding: 22px 15px;
+            color: white;
+            background: linear-gradient(
+                180deg,
+                #102f55,
+                #061a32
+            );
+        }
+
+        .brand {
+            padding: 0 10px 20px;
+            border-bottom: 1px solid
+                rgba(255,255,255,.13);
+        }
+
+        .brand h2 {
+            margin: 0;
+            font-size: 23px;
+        }
+
+        .brand span {
+            color: #e3b65d;
+        }
+
+        .brand p {
+            margin: 7px 0 0;
+            color: #afc0d5;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .menu {
+            margin-top: 18px;
+        }
+
+        .menu a {
+            display: block;
+            margin-bottom: 5px;
+            padding: 12px 13px;
+            border-radius: 8px;
+            color: #eef5ff;
+            text-decoration: none;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            color: #f3c66c;
+            background: rgba(255,255,255,.13);
+        }
+
+        main {
+            flex: 1;
+            min-width: 0;
+            padding: 24px 28px 50px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .topbar h1 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .back {
+            padding: 10px 15px;
+            border: 1px solid #d5a94f;
+            border-radius: 8px;
+            color: #173d67;
+            text-decoration: none;
+        }
+
+        .hero {
+            margin-bottom: 20px;
+            padding: 22px;
+            border-radius: 14px;
+            color: white;
+            background: linear-gradient(
+                135deg,
+                #173c65,
+                #1a5b91
+            );
+        }
+
+        .hero h2 {
+            margin: 0 0 8px;
+            color: #f2c568;
+        }
+
+        .hero p {
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            padding: 18px;
+            border: 1px solid #dce4ed;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 4px 14px
+                rgba(20,45,75,.05);
+        }
+
+        .stat .number {
+            margin-bottom: 7px;
+            color: #12385f;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .stat .label {
+            color: #687a90;
+            font-size: 13px;
+        }
+
+        .stat.published {
+            border-top: 4px solid #22975d;
+        }
+
+        .stat.pending {
+            border-top: 4px solid #e4aa37;
+        }
+
+        .stat.returned {
+            border-top: 4px solid #d04b4b;
+        }
+
+        .stat.total {
+            border-top: 4px solid #168bc2;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            padding: 21px;
+            border: 1px solid #dce4ed;
+            border-radius: 13px;
+            background: white;
+            box-shadow: 0 4px 14px
+                rgba(20,45,75,.05);
+        }
+
+        .card h3 {
+            margin: 0 0 18px;
+            font-size: 18px;
+        }
+
+        .bar-row {
+            display: grid;
+            grid-template-columns:
+                150px minmax(100px, 1fr) 45px;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 13px;
+        }
+
+        .bar-label {
+            overflow: hidden;
+            font-size: 13px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .bar-track {
+            height: 13px;
+            overflow: hidden;
+            border-radius: 20px;
+            background: #e9eef4;
+        }
+
+        .bar-fill {
+            height: 100%;
+            min-width: 3px;
+            border-radius: 20px;
+            background: linear-gradient(
+                90deg,
+                #168bc2,
+                #2aa4d8
+            );
+        }
+
+        .bar-fill.gold {
+            background: linear-gradient(
+                90deg,
+                #d7a849,
+                #efc66d
+            );
+        }
+
+        .bar-number {
+            font-size: 13px;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .info-table th,
+        .info-table td {
+            padding: 11px 8px;
+            border-bottom: 1px solid #e2e8ef;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        .info-table th {
+            color: #50627a;
+            background: #f5f8fb;
+        }
+
+        .empty {
+            padding: 30px;
+            color: #718196;
+            text-align: center;
+        }
+
+        @media (max-width: 950px) {
+            .stats {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            main {
+                padding: 18px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .bar-row {
+                grid-template-columns:
+                    100px minmax(80px, 1fr) 35px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <h2>SyrMura <span>AI</span></h2>
+
+            <p>
+                Әкімшілік басқару жүйесі
+            </p>
+        </div>
+
+        <nav class="menu">
+            <a href="/">🏠 Басты бет</a>
+            <a href="/admin">📊 Басқару панелі</a>
+            <a href="/admin/upload">📥 Құжат жүктеу</a>
+
+<a href="/digitization">
+    <span class="menu-icon">📥</span>
+    <span>Құжатты цифрландыру</span>
+</a>
+
+
+            <a href="/admin/documents/pending">
+                ⏳ Тексеруді күтуде
+            </a>
+
+            <a href="/admin/documents/published">
+                ✅ Жарияланғандар
+            </a>
+
+            <a href="/ocr">🔠 OCR — мәтінді тану</a>
+
+            <a href="/handwriting-recognition">
+                ✍️ Қолжазбаны тану
+            </a>
+
+            <a href="/quality-check">
+                📊 Сапаны бағалау
+            </a>
+
+            <a href="/document-restoration">
+                🪄 Құжатты қалпына келтіру
+            </a>
+
+            <a
+                class="active"
+                href="/archive-analytics"
+            >
+                📈 Архив аналитикасы
+            </a>
+
+            <a href="/admin/logout">🚪 Шығу</a>
+        </nav>
+    </aside>
+
+    <main>
+        <div class="topbar">
+            <h1>Архив аналитикасы</h1>
+
+            <a class="back" href="/admin">
+                Басқару панелі
+            </a>
+        </div>
+
+        <section class="hero">
+            <h2>Архив қорының статистикасы</h2>
+
+            <p>
+                Жүктелген материалдардың күйі,
+                бөлімшелері, жылдары және файл көлемі.
+            </p>
+        </section>
+
+        <section class="stats">
+            <div class="stat total">
+                <div class="number">
+                    {{ totals.total }}
+                </div>
+
+                <div class="label">
+                    Барлық материал
+                </div>
+            </div>
+
+            <div class="stat published">
+                <div class="number">
+                    {{ totals.published }}
+                </div>
+
+                <div class="label">
+                    Жарияланған
+                </div>
+            </div>
+
+            <div class="stat pending">
+                <div class="number">
+                    {{ totals.pending }}
+                </div>
+
+                <div class="label">
+                    Тексеруді күтуде
+                </div>
+            </div>
+
+            <div class="stat returned">
+                <div class="number">
+                    {{ totals.returned }}
+                </div>
+
+                <div class="label">
+                    Түзетуге қайтарылған
+                </div>
+            </div>
+        </section>
+
+        <div class="content-grid">
+
+            <section class="card">
+                <h3>📁 Бөлімшелер бойынша</h3>
+
+                {% if subsection_stats %}
+                    {% for item in subsection_stats %}
+                        <div class="bar-row">
+                            <div
+                                class="bar-label"
+                                title="{{ item.name }}"
+                            >
+                                {{ item.name }}
+                            </div>
+
+                            <div class="bar-track">
+                                <div
+                                    class="bar-fill"
+                                    style="width:
+                                        {{ item.percent }}%;
+                                    "
+                                ></div>
+                            </div>
+
+                            <div class="bar-number">
+                                {{ item.count }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty">
+                        Дерек жоқ
+                    </div>
+                {% endif %}
+            </section>
+
+            <section class="card">
+                <h3>📅 Жылдар бойынша</h3>
+
+                {% if year_stats %}
+                    {% for item in year_stats %}
+                        <div class="bar-row">
+                            <div class="bar-label">
+                                {{ item.name }}
+                            </div>
+
+                            <div class="bar-track">
+                                <div
+                                    class="bar-fill gold"
+                                    style="width:
+                                        {{ item.percent }}%;
+                                    "
+                                ></div>
+                            </div>
+
+                            <div class="bar-number">
+                                {{ item.count }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty">
+                        Жыл деректері жоқ
+                    </div>
+                {% endif %}
+            </section>
+
+            <section class="card">
+                <h3>💾 Файлдар туралы</h3>
+
+                <table class="info-table">
+                    <tr>
+                        <th>Көрсеткіш</th>
+                        <th>Нәтиже</th>
+                    </tr>
+
+                    <tr>
+                        <td>Жалпы файл көлемі</td>
+                        <td>{{ total_size }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Орташа файл көлемі</td>
+                        <td>{{ average_size }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Орналасқан жері бар материал</td>
+                        <td>{{ location_count }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Дереккөз сілтемесі бар</td>
+                        <td>{{ source_count }}</td>
+                    </tr>
+                </table>
+            </section>
+
+            <section class="card">
+                <h3>🕒 Соңғы материалдар</h3>
+
+                {% if recent_documents %}
+                    <table class="info-table">
+                        <tr>
+                            <th>Атауы</th>
+                            <th>Күйі</th>
+                        </tr>
+
+                        {% for document in recent_documents %}
+                            <tr>
+                                <td>
+                                    {{ document.title }}
+                                </td>
+
+                                <td>
+                                    {% if document.status == 'published' %}
+                                        Жарияланған
+                                    {% elif document.status == 'pending' %}
+                                        Тексеруде
+                                    {% elif document.status == 'returned' %}
+                                        Қайтарылған
+                                    {% else %}
+                                        {{ document.status }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <div class="empty">
+                        Материал жоқ
+                    </div>
+                {% endif %}
+            </section>
+
+        </div>
+    </main>
+</div>
+</body>
+</html>

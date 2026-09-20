@@ -1,0 +1,1455 @@
+
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Әкімші панелі — SyrMura AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        body {
+            background: #f2f5f9;
+        }
+
+        .admin-page {
+            min-height: 100vh;
+            margin-left: 225px;
+        }
+
+        .admin-header {
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 27px;
+            color: white;
+            background: #08182d;
+        }
+
+        .admin-header h1 {
+            font-size: 18px;
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 11px;
+        }
+
+        .logout-button {
+            padding: 8px 13px;
+            border: 1px solid #cba66a;
+            border-radius: 7px;
+            color: #e5c58c;
+            text-decoration: none;
+        }
+
+        .admin-content {
+            padding: 25px;
+        }
+
+        .welcome-card {
+            padding: 21px;
+            border-radius: 13px;
+            color: white;
+            background:
+                linear-gradient(135deg, #102947, #173d68);
+        }
+
+        .welcome-card h2 {
+            color: #e5c58c;
+            font-size: 21px;
+        }
+
+        .welcome-card p {
+            margin-top: 7px;
+            color: #c3cede;
+            font-size: 12px;
+        }
+
+        .admin-statistics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 13px;
+            margin-top: 18px;
+        }
+
+        .admin-stat-card {
+            padding: 17px;
+            border: 1px solid #e0e6ee;
+            border-radius: 11px;
+            background: white;
+        }
+
+        .admin-stat-card strong {
+            display: block;
+            color: #102947;
+            font-size: 23px;
+        }
+
+        .admin-stat-card span {
+            color: #758196;
+            font-size: 10px;
+        }
+
+        .admin-tools {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        .admin-tool {
+            padding: 19px;
+            border: 1px solid #e0e6ee;
+            border-radius: 11px;
+            background: white;
+        }
+
+        .admin-tool-icon {
+            margin-bottom: 11px;
+            font-size: 28px;
+        }
+
+        .admin-tool h3 {
+            color: #102947;
+            font-size: 15px;
+        }
+
+        .admin-tool p {
+            min-height: 38px;
+            margin: 7px 0 13px;
+            color: #748095;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .admin-tool a {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 6px;
+            color: white;
+            background: #0b78b8;
+            font-size: 10px;
+            text-decoration: none;
+        }
+
+        @media (max-width: 850px) {
+            .admin-page {
+                margin-left: 0;
+            }
+
+            .admin-statistics,
+            .admin-tools {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+<!-- SYRMURA_ADMIN_LAYOUT_FIX_START -->
+<style>
+    :root {
+        --admin-sidebar-width: 235px;
+        --admin-content-gap: 22px;
+    }
+
+    html,
+    body {
+        width: 100%;
+        min-height: 100%;
+        margin: 0;
+        overflow-x: hidden !important;
+    }
+
+    /* Сол жақ мәзір */
+    aside.sidebar,
+    .sidebar,
+    .admin-sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: var(--admin-sidebar-width) !important;
+        min-width: var(--admin-sidebar-width) !important;
+        max-width: var(--admin-sidebar-width) !important;
+        height: 100vh !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        z-index: 1000 !important;
+    }
+
+    /* Негізгі ортаңғы бөлік */
+    main,
+    .main,
+    .main-content,
+    .admin-main,
+    .content-wrapper {
+        width: auto !important;
+        min-width: 0 !important;
+        margin-left:
+            calc(
+                var(--admin-sidebar-width)
+                + var(--admin-content-gap)
+            ) !important;
+        padding-left: 0 !important;
+        padding-right: 20px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Жоғарғы панель негізгі бөлікпен бірдей орналассын */
+    .topbar,
+    .top-bar,
+    .admin-header,
+    header.topbar {
+        box-sizing: border-box !important;
+    }
+
+    /* Форма мәзірге жабыспасын */
+    .content,
+    .page-content,
+    .admin-content,
+    .form-container,
+    .upload-container,
+    .documents-container {
+        width: 100% !important;
+        max-width: none !important;
+        margin-left: 0 !important;
+        padding-left: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    form {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Colab ішінде көлденең жылжып кетуді тоқтату */
+    body {
+        position: relative !important;
+        left: 0 !important;
+    }
+
+    /* Планшет және тар экран */
+    @media (max-width: 900px) {
+        :root {
+            --admin-sidebar-width: 205px;
+            --admin-content-gap: 14px;
+        }
+
+        main,
+        .main,
+        .main-content,
+        .admin-main,
+        .content-wrapper {
+            padding-right: 12px !important;
+        }
+    }
+
+    /* Телефон */
+    @media (max-width: 650px) {
+        aside.sidebar,
+        .sidebar,
+        .admin-sidebar {
+            position: relative !important;
+            width: 100% !important;
+            min-width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+        }
+
+        main,
+        .main,
+        .main-content,
+        .admin-main,
+        .content-wrapper {
+            margin-left: 0 !important;
+            padding: 10px !important;
+        }
+    }
+</style>
+<!-- SYRMURA_ADMIN_LAYOUT_FIX_END -->
+
+
+<!-- PUBLIC SITE BOTTOM LINK STYLE -->
+<style>
+    .public-site-menu-divider {
+        height: 1px !important;
+        margin: 14px 8px 8px !important;
+        background: rgba(255,255,255,0.14) !important;
+    }
+
+    .public-site-bottom-link {
+        margin-top: 3px !important;
+        color: #b9d7ed !important;
+    }
+
+    .public-site-bottom-link:hover {
+        color: #efbd61 !important;
+        background: rgba(255,255,255,0.10) !important;
+    }
+</style>
+
+
+<!-- FIXED ADMIN MENU STYLE START -->
+<style>
+    /*
+       Мәзірдің барлық батырмасының өлшемі тұрақты.
+       Active және hover кезінде орын ауыспайды.
+    */
+    .sidebar nav,
+    .sidebar .side-menu {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 5px !important;
+        width: 100% !important;
+    }
+
+    .sidebar nav > a,
+    .sidebar .side-menu > a {
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        flex: 0 0 auto !important;
+        gap: 11px !important;
+
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        min-height: 47px !important;
+
+        padding: 10px 12px !important;
+        margin: 0 !important;
+
+        color: #eaf3fc !important;
+        background: transparent !important;
+
+        border: 1px solid transparent !important;
+        border-left: 3px solid transparent !important;
+        border-radius: 9px !important;
+
+        text-decoration: none !important;
+        font-size: 14px !important;
+        line-height: 1.25 !important;
+
+        box-sizing: border-box !important;
+        transform: translateY(0) !important;
+        transition:
+            background-color 0.12s ease,
+            border-color 0.12s ease,
+            color 0.12s ease,
+            box-shadow 0.08s ease,
+            transform 0.08s ease !important;
+    }
+
+    .sidebar nav > a .menu-icon,
+    .sidebar .side-menu > a .menu-icon {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 0 0 24px !important;
+        width: 24px !important;
+        min-width: 24px !important;
+        height: 24px !important;
+    }
+
+    /* Тінтуірді апарған кезде */
+    .sidebar nav > a:hover,
+    .sidebar .side-menu > a:hover {
+        color: #efbd61 !important;
+        background: rgba(255,255,255,0.09) !important;
+        border-color: rgba(239,189,97,0.22) !important;
+        border-left-color: #efbd61 !important;
+        transform: translateY(0) !important;
+    }
+
+    /* Қазіргі ашылған бөлім */
+    .sidebar nav > a.active,
+    .sidebar .side-menu > a.active {
+        color: #efbd61 !important;
+        background: rgba(255,255,255,0.14) !important;
+        border-color: rgba(239,189,97,0.28) !important;
+        border-left-color: #efbd61 !important;
+
+        /*
+           Белсенді кезде padding, margin және width өзгермейді.
+           Сондықтан батырма орнынан қозғалмайды.
+        */
+        padding: 10px 12px !important;
+        margin: 0 !important;
+        width: 100% !important;
+        transform: translateY(0) !important;
+
+        box-shadow:
+            inset 0 0 0 1px rgba(255,255,255,0.03),
+            0 2px 5px rgba(0,0,0,0.10) !important;
+    }
+
+    /*
+       Пернетақта батырмасы секілді басылу әсері
+    */
+    .sidebar nav > a:active,
+    .sidebar .side-menu > a:active,
+    .sidebar nav > a.menu-pressed,
+    .sidebar .side-menu > a.menu-pressed {
+        color: #ffffff !important;
+        background: #b68129 !important;
+        border-color: #8d621c !important;
+        border-left-color: #ffe0a0 !important;
+
+        transform: translateY(3px) !important;
+
+        box-shadow:
+            inset 0 3px 7px rgba(0,0,0,0.28),
+            0 1px 0 rgba(255,255,255,0.13) !important;
+    }
+
+    /* Пернетақтамен таңдалған кездегі белгі */
+    .sidebar nav > a:focus-visible,
+    .sidebar .side-menu > a:focus-visible {
+        outline: 2px solid #efbd61 !important;
+        outline-offset: 2px !important;
+    }
+
+    .sidebar .public-site-menu-divider {
+        flex: 0 0 auto !important;
+        width: calc(100% - 16px) !important;
+        height: 1px !important;
+        margin: 14px 8px 8px !important;
+        background: rgba(255,255,255,0.14) !important;
+    }
+
+    .sidebar .public-site-bottom-link {
+        margin-top: 0 !important;
+    }
+</style>
+<!-- FIXED ADMIN MENU STYLE END -->
+
+
+<!-- MODE SWITCH STYLE START -->
+<style>
+    .sidebar .mode-switch-divider {
+        flex: 0 0 auto !important;
+        width: calc(100% - 16px) !important;
+        height: 1px !important;
+        margin: 15px 8px 9px !important;
+        background: rgba(255,255,255,0.17) !important;
+    }
+
+    .sidebar .mode-switch-link {
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 11px !important;
+
+        width: 100% !important;
+        min-height: 48px !important;
+        padding: 10px 12px !important;
+        margin: 0 !important;
+
+        color: #f5d792 !important;
+        background: rgba(239,189,97,0.09) !important;
+
+        border: 1px solid rgba(239,189,97,0.25) !important;
+        border-left: 3px solid #efbd61 !important;
+        border-radius: 9px !important;
+
+        text-decoration: none !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        line-height: 1.25 !important;
+
+        box-sizing: border-box !important;
+        transition:
+            background 0.12s ease,
+            color 0.12s ease,
+            transform 0.08s ease,
+            box-shadow 0.08s ease !important;
+    }
+
+    .sidebar .mode-switch-link:hover {
+        color: #ffffff !important;
+        background: rgba(239,189,97,0.20) !important;
+    }
+
+    .sidebar .mode-switch-link:active {
+        color: #ffffff !important;
+        background: #b68129 !important;
+        transform: translateY(3px) !important;
+        box-shadow:
+            inset 0 3px 7px rgba(0,0,0,0.30) !important;
+    }
+
+    .sidebar .mode-switch-link .menu-icon {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 24px !important;
+        min-width: 24px !important;
+    }
+
+    .sidebar .admin-mode-link {
+        color: #ffd98b !important;
+        background: rgba(210,145,32,0.13) !important;
+    }
+
+    .sidebar .user-mode-link {
+        color: #bfe3fa !important;
+        background: rgba(61,154,207,0.12) !important;
+        border-color: rgba(89,184,231,0.30) !important;
+        border-left-color: #5db8e5 !important;
+    }
+
+    .sidebar .user-mode-link:hover {
+        background: rgba(61,154,207,0.24) !important;
+    }
+</style>
+<!-- MODE SWITCH STYLE END -->
+
+
+<!-- PERSISTENT KEY STYLE START -->
+<style>
+    /*
+       Барлық мәзір батырмасының негізгі өлшемі.
+       Таңдалған кезде көрші батырмалар қозғалмайды.
+    */
+    .sidebar nav a,
+    .sidebar .side-menu a {
+        position: relative !important;
+        box-sizing: border-box !important;
+
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        min-height: 48px !important;
+
+        margin: 0 !important;
+        padding: 10px 12px !important;
+
+        border: 1px solid transparent !important;
+        border-left: 3px solid transparent !important;
+        border-radius: 9px !important;
+
+        transform: translateY(0) !important;
+
+        transition:
+            color 0.12s ease,
+            background-color 0.12s ease,
+            border-color 0.12s ease,
+            box-shadow 0.10s ease,
+            transform 0.08s ease !important;
+    }
+
+    /*
+       Басылып таңдалған және сол күйде сақталатын батырма
+    */
+    .sidebar nav a.key-selected,
+    .sidebar .side-menu a.key-selected,
+    .sidebar nav a.active,
+    .sidebar .side-menu a.active {
+        color: #ffffff !important;
+        background:
+            linear-gradient(
+                180deg,
+                #bd8932 0%,
+                #95651f 100%
+            ) !important;
+
+        border-color: #d7a84f !important;
+        border-left-color: #ffe2a0 !important;
+
+        /*
+           Батырма перне сияқты ішке басылып тұрады.
+           Transform басқа батырмалардың орнын өзгертпейді.
+        */
+        transform: translateY(2px) !important;
+
+        box-shadow:
+            inset 0 4px 8px rgba(0,0,0,0.33),
+            inset 0 -1px 1px rgba(255,255,255,0.12),
+            0 1px 0 rgba(255,255,255,0.10) !important;
+
+        font-weight: 700 !important;
+    }
+
+    /*
+       Таңдалған перненің сол жағындағы жарық белгі
+    */
+    .sidebar nav a.key-selected::before,
+    .sidebar .side-menu a.key-selected::before,
+    .sidebar nav a.active::before,
+    .sidebar .side-menu a.active::before {
+        content: "" !important;
+        position: absolute !important;
+        left: -3px !important;
+        top: 8px !important;
+        bottom: 8px !important;
+        width: 3px !important;
+
+        background: #ffe09a !important;
+        border-radius: 0 4px 4px 0 !important;
+        box-shadow: 0 0 8px rgba(255,216,128,0.65) !important;
+    }
+
+    /*
+       Тінтуір дәл басылып тұрған сәттегі терең әсер
+    */
+    .sidebar nav a:active,
+    .sidebar .side-menu a:active,
+    .sidebar nav a.key-pressing,
+    .sidebar .side-menu a.key-pressing {
+        color: #ffffff !important;
+        background: #7f5318 !important;
+        border-color: #69400f !important;
+        border-left-color: #fff0be !important;
+
+        transform: translateY(4px) !important;
+
+        box-shadow:
+            inset 0 6px 10px rgba(0,0,0,0.43),
+            0 0 0 1px rgba(255,255,255,0.04) !important;
+    }
+
+    .sidebar nav a.key-selected .menu-icon,
+    .sidebar .side-menu a.key-selected .menu-icon,
+    .sidebar nav a.active .menu-icon,
+    .sidebar .side-menu a.active .menu-icon {
+        filter:
+            brightness(1.15)
+            drop-shadow(0 1px 1px rgba(0,0,0,0.25));
+    }
+
+    /*
+       Режим ауыстыру батырмалары да дәл солай белгіленеді
+    */
+    .sidebar a.mode-switch-link.key-selected {
+        color: #ffffff !important;
+        background:
+            linear-gradient(
+                180deg,
+                #258abb,
+                #176386
+            ) !important;
+
+        border-color: #63bce5 !important;
+        border-left-color: #c7edff !important;
+
+        box-shadow:
+            inset 0 4px 8px rgba(0,0,0,0.30),
+            0 1px 0 rgba(255,255,255,0.10) !important;
+    }
+
+    .sidebar nav a:focus-visible,
+    .sidebar .side-menu a:focus-visible {
+        outline: 2px solid #ffe09a !important;
+        outline-offset: 2px !important;
+    }
+</style>
+<!-- PERSISTENT KEY STYLE END -->
+
+
+<!-- ZERO MOVEMENT MENU FIX START -->
+<style>
+    /*
+       Мәзірдің барлық батырмасы бірдей тұрақты өлшемде.
+    */
+    .sidebar nav,
+    .sidebar .side-menu {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 5px !important;
+        width: 100% !important;
+    }
+
+    .sidebar nav > a,
+    .sidebar .side-menu > a,
+    .sidebar nav > a:hover,
+    .sidebar .side-menu > a:hover,
+    .sidebar nav > a:active,
+    .sidebar .side-menu > a:active,
+    .sidebar nav > a.active,
+    .sidebar .side-menu > a.active,
+    .sidebar nav > a.key-selected,
+    .sidebar .side-menu > a.key-selected,
+    .sidebar nav > a.key-pressing,
+    .sidebar .side-menu > a.key-pressing {
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        flex: 0 0 48px !important;
+        gap: 11px !important;
+
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+
+        height: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+
+        padding: 10px 12px !important;
+        margin: 0 !important;
+
+        border-width: 1px 1px 1px 3px !important;
+        border-style: solid !important;
+        border-radius: 9px !important;
+
+        box-sizing: border-box !important;
+
+        /*
+           Ешқандай бағытта қозғалмайды.
+        */
+        transform: none !important;
+        translate: none !important;
+        scale: 1 !important;
+
+        line-height: 1.25 !important;
+        text-decoration: none !important;
+    }
+
+    /*
+       Қалыпты батырма
+    */
+    .sidebar nav > a,
+    .sidebar .side-menu > a {
+        color: #eaf3fc !important;
+        background: transparent !important;
+        border-color: transparent !important;
+    }
+
+    /*
+       Тінтуірді апарғандағы әсер.
+       Өлшемі мен орны өзгермейді.
+    */
+    .sidebar nav > a:hover,
+    .sidebar .side-menu > a:hover {
+        color: #efbd61 !important;
+        background: rgba(255,255,255,0.09) !important;
+        border-color:
+            rgba(239,189,97,0.22)
+            rgba(239,189,97,0.22)
+            rgba(239,189,97,0.22)
+            #efbd61 !important;
+
+        transform: none !important;
+    }
+
+    /*
+       Таңдалған батырма.
+       Перне басылғандай көрінеді, бірақ қозғалмайды.
+    */
+    .sidebar nav > a.active,
+    .sidebar .side-menu > a.active,
+    .sidebar nav > a.key-selected,
+    .sidebar .side-menu > a.key-selected {
+        color: #ffffff !important;
+
+        background:
+            linear-gradient(
+                180deg,
+                #b9822c 0%,
+                #91601c 100%
+            ) !important;
+
+        border-color:
+            #d8a74d
+            #d8a74d
+            #70450e
+            #ffe09a !important;
+
+        transform: none !important;
+
+        box-shadow:
+            inset 0 4px 8px rgba(0,0,0,0.34),
+            inset 0 -1px 1px rgba(255,255,255,0.10),
+            0 0 0 1px rgba(255,224,154,0.05) !important;
+
+        font-weight: 700 !important;
+    }
+
+    /*
+       Тінтуір нақты басылып тұрған қысқа сәт.
+       Бұл кезде де қозғалыс болмайды.
+    */
+    .sidebar nav > a:active,
+    .sidebar .side-menu > a:active,
+    .sidebar nav > a.key-pressing,
+    .sidebar .side-menu > a.key-pressing {
+        color: #ffffff !important;
+        background: #75470f !important;
+
+        border-color:
+            #5b3308
+            #5b3308
+            #452400
+            #fff0bd !important;
+
+        transform: none !important;
+
+        box-shadow:
+            inset 0 6px 11px rgba(0,0,0,0.48) !important;
+    }
+
+    /*
+       Бұрынғы ::before белгісі де өлшемге әсер етпейді.
+    */
+    .sidebar nav > a::before,
+    .sidebar .side-menu > a::before {
+        box-sizing: border-box !important;
+        pointer-events: none !important;
+    }
+
+    /*
+       Белгіше мен мәтін орны тұрақты.
+    */
+    .sidebar nav > a .menu-icon,
+    .sidebar .side-menu > a .menu-icon {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 0 0 24px !important;
+
+        width: 24px !important;
+        min-width: 24px !important;
+        max-width: 24px !important;
+
+        height: 24px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .sidebar nav > a span:last-child,
+    .sidebar .side-menu > a span:last-child {
+        flex: 1 1 auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /*
+       Режим ауыстыру батырмалары да қозғалмайды.
+    */
+    .sidebar a.mode-switch-link,
+    .sidebar a.mode-switch-link:hover,
+    .sidebar a.mode-switch-link:active,
+    .sidebar a.mode-switch-link.key-selected {
+        height: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+        padding: 10px 12px !important;
+        margin: 0 !important;
+        transform: none !important;
+    }
+</style>
+<!-- ZERO MOVEMENT MENU FIX END -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- STATIC ACTIVE MENU START -->
+<style>
+    /*
+       Барлық әкімші батырмасы тұрақты қалыпта болады.
+    */
+    .sidebar nav > a,
+    .sidebar .side-menu > a,
+    .sidebar nav > a:hover,
+    .sidebar .side-menu > a:hover,
+    .sidebar nav > a:active,
+    .sidebar .side-menu > a:active,
+    .sidebar nav > a.active,
+    .sidebar .side-menu > a.active,
+    .sidebar nav > a.key-selected,
+    .sidebar .side-menu > a.key-selected,
+    .sidebar nav > a.key-pressing,
+    .sidebar .side-menu > a.key-pressing {
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        flex: 0 0 46px !important;
+        gap: 10px !important;
+
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+
+        height: 46px !important;
+        min-height: 46px !important;
+        max-height: 46px !important;
+
+        padding: 9px 11px !important;
+        margin: 0 !important;
+
+        border-width: 0 0 0 3px !important;
+        border-style: solid !important;
+        border-color: transparent !important;
+        border-radius: 8px !important;
+
+        box-sizing: border-box !important;
+
+        /*
+           Ешқандай секіру, жылжу және анимация болмайды.
+        */
+        transform: none !important;
+        translate: none !important;
+        scale: 1 !important;
+        transition: none !important;
+        animation: none !important;
+
+        box-shadow: none !important;
+        text-decoration: none !important;
+    }
+
+    /*
+       Қалыпты батырма.
+    */
+    .sidebar nav > a,
+    .sidebar .side-menu > a {
+        color: #edf4fb !important;
+        background: transparent !important;
+        border-left-color: transparent !important;
+        font-weight: 400 !important;
+    }
+
+    /*
+       Тінтуірді апарғанда ғана жеңіл фон.
+    */
+    .sidebar nav > a:hover,
+    .sidebar .side-menu > a:hover {
+        color: #f2c66e !important;
+        background: rgba(255,255,255,0.07) !important;
+        border-left-color: rgba(242,198,110,0.45) !important;
+
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    /*
+       Ашық тұрған бөлім:
+       қызғылт сары толық фон болмайды.
+    */
+    .sidebar nav > a.active,
+    .sidebar .side-menu > a.active,
+    .sidebar nav > a.key-selected,
+    .sidebar .side-menu > a.key-selected {
+        color: #f4c96e !important;
+
+        background: rgba(255,255,255,0.12) !important;
+
+        border-left-color: #efbd61 !important;
+
+        transform: none !important;
+        box-shadow: none !important;
+
+        font-weight: 600 !important;
+    }
+
+    /*
+       Басып тұрған сәтте де батырма орнынан қозғалмайды.
+    */
+    .sidebar nav > a:active,
+    .sidebar .side-menu > a:active,
+    .sidebar nav > a.key-pressing,
+    .sidebar .side-menu > a.key-pressing {
+        color: #ffffff !important;
+        background: rgba(255,255,255,0.16) !important;
+        border-left-color: #ffe0a0 !important;
+
+        transform: none !important;
+        box-shadow:
+            inset 0 2px 5px rgba(0,0,0,0.22) !important;
+    }
+
+    /*
+       Бұрынғы алтын ::before белгісін өшіру.
+    */
+    .sidebar nav > a::before,
+    .sidebar .side-menu > a::before {
+        display: none !important;
+        content: none !important;
+    }
+
+    /*
+       Белгіше орны да тұрақты.
+    */
+    .sidebar nav > a .menu-icon,
+    .sidebar .side-menu > a .menu-icon {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 0 0 24px !important;
+
+        width: 24px !important;
+        min-width: 24px !important;
+        max-width: 24px !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /*
+       Режим ауыстыру батырмасы тұрақты көк түсте.
+    */
+    .sidebar a.mode-switch-link,
+    .sidebar a.mode-switch-link:hover,
+    .sidebar a.mode-switch-link:active,
+    .sidebar a.mode-switch-link.active,
+    .sidebar a.mode-switch-link.key-selected {
+        color: #c6e8fa !important;
+        background: rgba(50,145,198,0.12) !important;
+        border-left-color: #55acd8 !important;
+
+        transform: none !important;
+        transition: none !important;
+        animation: none !important;
+        box-shadow: none !important;
+    }
+</style>
+<!-- STATIC ACTIVE MENU END -->
+
+</head>
+
+<body>
+
+<aside class="sidebar">
+<div class="brand">
+<div class="brand-icon">S</div>
+<div>
+<h2>SyrMura <span>AI</span></h2>
+<p>Әкімшілік басқару жүйесі</p>
+</div>
+</div>
+<nav class="side-menu">
+<a class="" href="/admin">
+<span class="menu-icon">📊</span>
+<span>Басқару панелі</span>
+</a>
+<a class="working-admin-link" href="/admin/upload">
+<span class="menu-icon">📥</span>
+<span>Құжат жүктеу</span>
+</a>
+<a class="working-admin-link" href="/admin/documents/pending">
+<span class="menu-icon">⏳</span>
+<span>Тексеруді күтуде</span>
+</a>
+<a class="working-admin-link" href="/admin/documents/published">
+<span class="menu-icon">✅</span>
+<span>Жарияланғандар</span>
+</a>
+<a class="working-admin-link" href="/admin/documents/returned">
+<span class="menu-icon">↩️</span>
+<span>Түзетуге қайтарылған</span>
+</a>
+<a class="" href="/handwriting-recognition">
+    ✍️ Қолжазбаны тану
+</a>
+<a class="" href="/archive-analytics">
+<span class="menu-icon">📈</span>
+<span>Архив аналитикасы</span>
+</a>
+<a class="" href="/digitization">
+<span class="menu-icon">📥</span>
+<span>Құжатты цифрландыру</span>
+</a>
+<a class="" href="/document-restoration">
+<span class="menu-icon">🛠️</span>
+<span>Құжатты қалпына келтіру</span>
+</a>
+<!-- OCR QUALITY ADMIN MENU START -->
+<a class="" href="/ocr">
+<span class="menu-icon">🔎</span>
+<span>OCR — мәтінді тану</span>
+</a>
+<a class="" href="/quality-check">
+<span class="menu-icon">📊</span>
+<span>Құжат сапасын бағалау</span>
+</a>
+<!-- OCR QUALITY ADMIN MENU END -->
+<div class="public-site-menu-divider"></div>
+<!-- ADMIN TO USER MODE START -->
+<div class="mode-switch-divider"></div>
+<a class="mode-switch-link user-mode-link" href="/">
+<span class="menu-icon">🌐</span>
+<span>Қолданушы режиміне өту</span>
+</a>
+<!-- ADMIN TO USER MODE END -->
+</nav>
+</aside>
+
+<main class="admin-page">
+    <header class="admin-header">
+        <h1>🔐 Әкімші панелі</h1>
+
+        <div class="admin-user">
+            <span>
+                👤 {{ username }} — әкімші
+            </span>
+
+            
+<a href="/archive-analytics">
+    📈 Архив аналитикасы
+</a>
+
+<a href="/admin/logout"
+               class="logout-button">
+                Шығу
+            </a>
+        </div>
+    </header>
+
+    <div class="admin-content">
+        <section class="welcome-card">
+            <h2>Қош келдіңіз, {{ username }}!</h2>
+
+            <p>
+                Архив құжаттарын жүктеу, тексеру және
+                жариялау қызметтері сізге қолжетімді.
+            </p>
+        </section>
+
+        <section class="admin-statistics">
+            <div class="admin-stat-card">
+                <strong>{{ total_documents }}</strong>
+                <span>Жүктелген құжаттар</span>
+            </div>
+
+            <div class="admin-stat-card">
+                <strong>{{ pending_documents }}</strong>
+                <span>Тексеруді күтуде</span>
+            </div>
+
+            <div class="admin-stat-card">
+                <strong>{{ published_documents }}</strong>
+                <span>Жарияланған құжаттар</span>
+            </div>
+
+            <div class="admin-stat-card">
+                <strong>{{ returned_documents }}</strong>
+                <span>Түзетуге қайтарылған</span>
+            </div>
+        </section>
+
+        <section class="admin-tools">
+            <article class="admin-tool">
+                <div class="admin-tool-icon">📤</div>
+                <h3>Құжат жүктеу</h3>
+                <p>
+                    Архив құжатын тиісті бөлім мен
+                    бөлімшеге жүктеу.
+                </p>
+                <a href="/admin/upload">Құжат жүктеу</a>
+            </article>
+
+            <article class="admin-tool">
+                <div class="admin-tool-icon">🔍</div>
+                <h3>Құжаттарды тексеру</h3>
+                <p>
+                    Жүктелген материалдарды қарап,
+                    жариялауға дайындау.
+                </p>
+                <a href="#">Тексеруді ашу</a>
+            </article>
+
+            <article class="admin-tool">
+                <div class="admin-tool-icon">🪄</div>
+                <h3>Цифрландыру</h3>
+                <p>
+                    OCR, қолжазбаны тану және
+                    құжат сапасын бағалау.
+                </p>
+                <a href="/digitization">Құралдарды ашу</a>
+            </article>
+        </section>
+    </div>
+</main>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const links = document.querySelectorAll("a");
+
+    links.forEach(function (link) {
+        const text = link.textContent.trim();
+
+        if (text.includes("Тексеруді күтуде")) {
+            link.href = "/admin/documents/pending";
+        }
+
+        if (text.includes("Жарияланғандар")) {
+            link.href = "/admin/documents/published";
+        }
+
+        if (text.includes("Түзетуге қайтарылған")) {
+            link.href = "/admin/documents/returned";
+        }
+    });
+});
+</script>
+
+
+<!-- FIXED ADMIN MENU SCRIPT START -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const currentPath = window.location.pathname.replace(
+        /\/+$/,
+        ""
+    ) || "/";
+
+    const links = document.querySelectorAll(
+        ".sidebar nav a, .sidebar .side-menu a"
+    );
+
+    let bestLink = null;
+    let bestLength = -1;
+
+    links.forEach(function (link) {
+        link.classList.remove("active");
+
+        let linkPath;
+
+        try {
+            linkPath = new URL(
+                link.href,
+                window.location.origin
+            ).pathname.replace(/\/+$/, "") || "/";
+        } catch (error) {
+            return;
+        }
+
+        const exactMatch = linkPath === currentPath;
+
+        const documentsMatch =
+            linkPath === "/admin/documents/pending"
+            && currentPath.startsWith(
+                "/admin/documents/pending"
+            );
+
+        if (
+            exactMatch
+            || documentsMatch
+            || (
+                linkPath !== "/"
+                && currentPath.startsWith(linkPath + "/")
+            )
+        ) {
+            if (linkPath.length > bestLength) {
+                bestLink = link;
+                bestLength = linkPath.length;
+            }
+        }
+
+        /*
+           Тінтуір немесе пернетақта басылғанда
+           қысқа физикалық басылу әсерін көрсету.
+        */
+        link.addEventListener("pointerdown", function () {
+            link.classList.add("menu-pressed");
+        });
+
+        link.addEventListener("pointerup", function () {
+            setTimeout(function () {
+                link.classList.remove("menu-pressed");
+            }, 90);
+        });
+
+        link.addEventListener("pointerleave", function () {
+            link.classList.remove("menu-pressed");
+        });
+
+        link.addEventListener("keydown", function (event) {
+            if (
+                event.key === "Enter"
+                || event.key === " "
+            ) {
+                link.classList.add("menu-pressed");
+            }
+        });
+
+        link.addEventListener("keyup", function () {
+            setTimeout(function () {
+                link.classList.remove("menu-pressed");
+            }, 90);
+        });
+    });
+
+    if (bestLink) {
+        bestLink.classList.add("active");
+    }
+});
+</script>
+<!-- FIXED ADMIN MENU SCRIPT END -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- STATIC ACTIVE MENU SCRIPT START -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const links = Array.from(
+        document.querySelectorAll(
+            ".sidebar nav a, .sidebar .side-menu a"
+        )
+    );
+
+    const currentPath = (
+        window.location.pathname.replace(/\/+$/, "")
+        || "/"
+    );
+
+    /*
+       Бұрын localStorage ішінде сақталған ауыспалы
+       қызғылт сары батырманы тазалау.
+    */
+    try {
+        localStorage.removeItem(
+            "syrmura_admin_selected_key"
+        );
+
+        localStorage.removeItem(
+            "syrmura_public_selected_key"
+        );
+    } catch (error) {
+        // localStorage жабық болса, өткізіледі
+    }
+
+    links.forEach(function (link) {
+        link.classList.remove(
+            "active",
+            "key-selected",
+            "key-pressing",
+            "menu-pressed"
+        );
+
+        link.removeAttribute("aria-current");
+    });
+
+    function pathOf(link) {
+        try {
+            return (
+                new URL(
+                    link.href,
+                    window.location.origin
+                ).pathname.replace(/\/+$/, "")
+                || "/"
+            );
+        } catch (error) {
+            return "";
+        }
+    }
+
+    let selectedLink = null;
+    let bestLength = -1;
+
+    links.forEach(function (link) {
+        const linkPath = pathOf(link);
+
+        const exactMatch =
+            linkPath === currentPath;
+
+        const childMatch =
+            linkPath !== "/"
+            && currentPath.startsWith(linkPath + "/");
+
+        if (
+            (exactMatch || childMatch)
+            && linkPath.length > bestLength
+        ) {
+            selectedLink = link;
+            bestLength = linkPath.length;
+        }
+    });
+
+    if (selectedLink) {
+        selectedLink.classList.add("active");
+        selectedLink.setAttribute(
+            "aria-current",
+            "page"
+        );
+    }
+
+    /*
+       Басылған сәтте қысқа ішкі көлеңке ғана көрсетіледі.
+       Класс жаңа бет ашылар алдында жойылады.
+    */
+    links.forEach(function (link) {
+        link.addEventListener(
+            "pointerdown",
+            function () {
+                link.classList.add("key-pressing");
+            }
+        );
+
+        link.addEventListener(
+            "pointerup",
+            function () {
+                link.classList.remove("key-pressing");
+            }
+        );
+
+        link.addEventListener(
+            "pointerleave",
+            function () {
+                link.classList.remove("key-pressing");
+            }
+        );
+    });
+});
+</script>
+<!-- STATIC ACTIVE MENU SCRIPT END -->
+
+</body>
+</html>

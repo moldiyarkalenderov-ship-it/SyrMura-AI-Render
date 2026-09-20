@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Әкімшіге кіру — SyrMura AI</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background:
+                radial-gradient(
+                    circle at 20% 20%,
+                    #1b3d63 0%,
+                    transparent 32%
+                ),
+                linear-gradient(
+                    135deg,
+                    #071426,
+                    #102947
+                );
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 410px;
+            padding: 31px;
+            border: 1px solid rgba(229,197,140,.3);
+            border-radius: 18px;
+            background: white;
+            box-shadow: 0 22px 65px rgba(0,0,0,.35);
+        }
+
+        .logo {
+            width: 58px;
+            height: 58px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 14px;
+            border: 2px solid #cba66a;
+            border-radius: 50%;
+            color: #c0934f;
+            font-family: Georgia, serif;
+            font-size: 34px;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: #08182d;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .subtitle {
+            margin: 8px 0 24px;
+            color: #718096;
+            font-size: 12px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin: 14px 0 6px;
+            color: #25354b;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            height: 45px;
+            padding: 0 13px;
+            border: 1px solid #d9e0e8;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #c49754;
+            box-shadow: 0 0 0 3px rgba(196,151,84,.13);
+        }
+
+        .login-button {
+            width: 100%;
+            height: 45px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            background: #0b78b8;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-button:hover {
+            background: #08689f;
+        }
+
+        .message {
+            margin-bottom: 14px;
+            padding: 10px;
+            border-radius: 7px;
+            color: #9d3030;
+            background: #fff0f0;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 18px;
+            color: #87652f;
+            font-size: 12px;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .security-note {
+            margin-top: 19px;
+            padding-top: 15px;
+            border-top: 1px solid #e5e9ef;
+            color: #8490a1;
+            font-size: 10px;
+            line-height: 1.5;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="login-container">
+        <div class="logo">S</div>
+
+        <h1>SyrMura AI Bot</h1>
+
+        <p class="subtitle">
+            Архив әкімшісінің басқару жүйесі
+        </p>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <label for="username">Әкімші логині</label>
+
+            <input
+                id="username"
+                name="username"
+                type="text"
+                autocomplete="username"
+                required
+            >
+
+            <label for="password">Құпиясөз</label>
+
+            <input
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                required
+            >
+
+            <button class="login-button" type="submit">
+                Жүйеге кіру
+            </button>
+        </form>
+
+        <a href="/" class="back-link">
+            ← Басты бетке қайту
+        </a>
+
+        <p class="security-note">
+            Бұл бөлімге тек архив әкімшісі кіре алады.
+            Рұқсатсыз кіру әрекеттері тіркеледі.
+        </p>
+    </section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const links = document.querySelectorAll("a");
+
+    links.forEach(function (link) {
+        const text = link.textContent.trim();
+
+        if (text.includes("Тексеруді күтуде")) {
+            link.href = "/admin/documents/pending";
+        }
+
+        if (text.includes("Жарияланғандар")) {
+            link.href = "/admin/documents/published";
+        }
+
+        if (text.includes("Түзетуге қайтарылған")) {
+            link.href = "/admin/documents/returned";
+        }
+    });
+});
+</script>
+
+</body>
+</html>

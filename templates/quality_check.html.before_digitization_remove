@@ -1,0 +1,505 @@
+
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Құжат сапасын бағалау — SyrMura AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            color: #10243d;
+            background: #eef3f8;
+            font-family: Arial, sans-serif;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 70px;
+            padding: 0 5%;
+            color: white;
+            background: #071b33;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            display: grid;
+            place-items: center;
+            width: 43px;
+            height: 43px;
+            border: 2px solid #ddb15a;
+            border-radius: 50%;
+            color: #edc675;
+            font-family: Georgia, serif;
+            font-size: 25px;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 21px;
+        }
+
+        .brand span {
+            color: #edc675;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-links a {
+            padding: 9px 13px;
+            border: 1px solid #9c793b;
+            border-radius: 7px;
+            color: #f0ca7c;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .hero {
+            padding: 38px 20px 29px;
+            color: white;
+            background:
+                linear-gradient(
+                    135deg,
+                    #123f6a,
+                    #0b2542
+                );
+            text-align: center;
+        }
+
+        .hero h2 {
+            margin: 0 0 10px;
+            color: #efc778;
+            font-family: Georgia, serif;
+            font-size: clamp(30px, 5vw, 47px);
+        }
+
+        .hero p {
+            max-width: 760px;
+            margin: auto;
+            color: #d3dfeb;
+            line-height: 1.6;
+        }
+
+        .workspace {
+            display: grid;
+            grid-template-columns:
+                minmax(300px, 400px) 1fr;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 24px auto;
+            padding: 0 20px 60px;
+        }
+
+        .panel {
+            padding: 21px;
+            border: 1px solid #d6e0ea;
+            border-radius: 14px;
+            background: white;
+            box-shadow:
+                0 8px 24px rgba(20,48,80,.08);
+        }
+
+        .panel h3 {
+            margin: 0 0 8px;
+            color: #173b62;
+        }
+
+        .description {
+            margin: 0 0 17px;
+            color: #718195;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .upload-box {
+            padding: 27px 15px;
+            border: 2px dashed #9fb4c9;
+            border-radius: 10px;
+            background: #f5f8fb;
+            text-align: center;
+        }
+
+        .upload-box input {
+            max-width: 100%;
+            cursor: pointer;
+        }
+
+        .submit-button {
+            width: 100%;
+            min-height: 46px;
+            margin-top: 15px;
+            border: 0;
+            border-radius: 8px;
+            color: white;
+            background:
+                linear-gradient(
+                    135deg,
+                    #168fc5,
+                    #106da1
+                );
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .error {
+            margin-bottom: 14px;
+            padding: 11px;
+            border-radius: 7px;
+            color: #8a3038;
+            background: #ffe7e7;
+            font-size: 13px;
+        }
+
+        .preview {
+            width: 100%;
+            max-height: 360px;
+            margin-top: 17px;
+            border-radius: 8px;
+            object-fit: contain;
+            background: #e5eaf0;
+        }
+
+        .score-box {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 22px;
+            padding: 18px;
+            border-radius: 12px;
+            background: #f5f8fb;
+        }
+
+        .score-circle {
+            display: grid;
+            place-items: center;
+            flex: 0 0 115px;
+            width: 115px;
+            height: 115px;
+            border: 10px solid var(--score-color);
+            border-radius: 50%;
+            background: white;
+        }
+
+        .score-number {
+            color: var(--score-color);
+            font-size: 31px;
+            font-weight: 800;
+        }
+
+        .score-label {
+            color: #778698;
+            font-size: 11px;
+        }
+
+        .score-summary h3 {
+            margin-bottom: 7px;
+            color: var(--score-color);
+            font-size: 23px;
+        }
+
+        .score-summary p {
+            margin: 0;
+            color: #6a798b;
+            line-height: 1.5;
+        }
+
+        .metrics {
+            display: grid;
+            gap: 13px;
+        }
+
+        .metric {
+            padding: 13px;
+            border: 1px solid #e0e6ed;
+            border-radius: 9px;
+        }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .progress {
+            height: 9px;
+            overflow: hidden;
+            border-radius: 9px;
+            background: #e5eaf0;
+        }
+
+        .progress-value {
+            height: 100%;
+            width: var(--metric-score);
+            border-radius: 9px;
+            background:
+                linear-gradient(
+                    90deg,
+                    #198ec2,
+                    #e1b359
+                );
+        }
+
+        .metric-note {
+            margin-top: 7px;
+            color: #738294;
+            font-size: 11px;
+        }
+
+        .recommendations {
+            margin-top: 18px;
+            padding: 16px;
+            border-left: 4px solid #d9ac53;
+            border-radius: 8px;
+            background: #fff7e7;
+        }
+
+        .recommendations h4 {
+            margin: 0 0 9px;
+            color: #6f531b;
+        }
+
+        .recommendations ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #715f3b;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .empty {
+            display: grid;
+            place-items: center;
+            min-height: 440px;
+            border: 1px dashed #afbdcb;
+            border-radius: 10px;
+            color: #8190a0;
+            background: #f8fafc;
+            text-align: center;
+        }
+
+        @media (max-width: 850px) {
+            .workspace {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 10px;
+                padding: 14px 18px;
+            }
+
+            .score-box {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<header class="topbar">
+    <div class="brand">
+        <div class="brand-logo">S</div>
+        <h1>SyrMura <span>AI</span></h1>
+    </div>
+
+    <nav class="nav-links">
+        <a href="/">Басты бет</a>
+        <a href="/ocr">OCR</a>
+
+<a href="/handwriting-recognition">
+    ✍️ Қолжазбаны тану
+</a>
+
+        <a href="/admin">Әкімші панелі</a>
+    
+<a href="/digitization">
+    <span class="menu-icon">📥</span>
+    <span>Құжатты цифрландыру</span>
+</a>
+
+</nav>
+</header>
+
+<section class="hero">
+    <h2>Құжат сапасын бағалау</h2>
+
+    <p>
+        Архив құжатының сканерленген суретін жүктеңіз.
+        Жүйе ажыратымдылықты, анықтықты, жарықты және
+        контрастты автоматты бағалайды.
+    </p>
+</section>
+
+<main class="workspace">
+    <section class="panel">
+        <h3>Сканерді тексеру</h3>
+
+        <p class="description">
+            JPG, JPEG, PNG немесе TIFF форматындағы
+            құжат суретін таңдаңыз.
+        </p>
+
+        {% if error %}
+        <div class="error">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            id="quality-form"
+        >
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+            >
+
+            <div class="upload-box">
+                <input
+                    type="file"
+                    name="quality_image"
+                    id="quality_image"
+                    accept=".jpg,.jpeg,.png,.tif,.tiff"
+                    required
+                >
+            </div>
+
+            <button
+                type="submit"
+                class="submit-button"
+                id="quality-button"
+            >
+                Сапаны бағалау
+            </button>
+        </form>
+
+        {% if preview_data %}
+        <img
+            class="preview"
+            src="{{ preview_data }}"
+            alt="Тексерілген құжат"
+        >
+        {% endif %}
+    </section>
+
+    <section class="panel">
+        {% if report %}
+            <div
+                class="score-box"
+                style="--score-color: {{ report.color }}"
+            >
+                <div class="score-circle">
+                    <div>
+                        <div class="score-number">
+                            {{ report.total_score }}
+                        </div>
+
+                        <div class="score-label">
+                            100 балдан
+                        </div>
+                    </div>
+                </div>
+
+                <div class="score-summary">
+                    <h3>{{ report.grade }}</h3>
+                    <p>{{ report.summary }}</p>
+                </div>
+            </div>
+
+            <div class="metrics">
+                {% for metric in report.metrics %}
+                <div class="metric">
+                    <div class="metric-header">
+                        <span>{{ metric.name }}</span>
+                        <span>{{ metric.score }}/100</span>
+                    </div>
+
+                    <div class="progress">
+                        <div
+                            class="progress-value"
+                            style="--metric-score:
+                                   {{ metric.score }}%"
+                        ></div>
+                    </div>
+
+                    <div class="metric-note">
+                        {{ metric.note }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="recommendations">
+                <h4>Ұсыныстар</h4>
+
+                <ul>
+                    {% for recommendation
+                       in report.recommendations %}
+                    <li>{{ recommendation }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        {% else %}
+            <div class="empty">
+                <div>
+                    <div style="font-size:55px">📊</div>
+                    <h3>Бағалау нәтижесі</h3>
+                    <p>
+                        Құжат суретін жүктегеннен кейін
+                        сапа көрсеткіштері осы жерде шығады.
+                    </p>
+                </div>
+            </div>
+        {% endif %}
+    </section>
+</main>
+
+<script>
+    const qualityForm = document.getElementById(
+        "quality-form"
+    );
+
+    const qualityButton = document.getElementById(
+        "quality-button"
+    );
+
+    qualityForm.addEventListener(
+        "submit",
+        function () {
+            qualityButton.disabled = true;
+            qualityButton.textContent =
+                "Құжат талданып жатыр...";
+        }
+    );
+</script>
+</body>
+</html>

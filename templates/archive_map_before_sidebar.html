@@ -1,0 +1,563 @@
+
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Архив картасы — SyrMura AI</title>
+
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #10213a;
+            background: #f2f5f9;
+        }
+
+        .page {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            padding: 22px 14px;
+            color: white;
+            background:
+                linear-gradient(180deg, #112e51 0%, #061a31 100%);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 8px 22px;
+            border-bottom: 1px solid rgba(255,255,255,.12);
+        }
+
+        .brand-logo {
+            display: grid;
+            place-items: center;
+            width: 46px;
+            height: 46px;
+            border: 2px solid #ddb563;
+            border-radius: 50%;
+            color: #edc879;
+            font-family: Georgia, serif;
+            font-size: 27px;
+        }
+
+        .brand h2 {
+            margin: 0;
+            font-size: 21px;
+        }
+
+        .brand h2 span {
+            color: #edc879;
+        }
+
+        .brand p {
+            margin: 5px 0 0;
+            color: #aebed1;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .menu {
+            margin-top: 20px;
+        }
+
+        .menu a {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            margin-bottom: 5px;
+            padding: 13px 15px;
+            border-radius: 10px;
+            color: #eef5ff;
+            font-size: 15px;
+            text-decoration: none;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            color: #f1c66f;
+            background: rgba(255,255,255,.13);
+            box-shadow: inset 3px 0 #e0b55e;
+        }
+
+        .main {
+            min-width: 0;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 66px;
+            padding: 0 28px;
+            color: white;
+            background: #071a31;
+        }
+
+        .topbar h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .topbar a {
+            padding: 9px 17px;
+            border: 1px solid #d8ad59;
+            border-radius: 8px;
+            color: #f2c66f;
+            text-decoration: none;
+        }
+
+        .content {
+            padding: 18px;
+        }
+
+        .intro {
+            margin-bottom: 15px;
+            padding: 18px 22px;
+            border-radius: 14px;
+            color: white;
+            background:
+                linear-gradient(135deg, #153d69, #1e6094);
+        }
+
+        .intro h2 {
+            margin: 0 0 7px;
+            color: #f4cb7c;
+            font-size: 25px;
+        }
+
+        .intro p {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .tools {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .tools input,
+        .tools select {
+            height: 42px;
+            padding: 0 13px;
+            border: 1px solid #ccd7e3;
+            border-radius: 8px;
+            background: white;
+            font-size: 14px;
+        }
+
+        .tools input {
+            flex: 1;
+        }
+
+        .tools select {
+            width: 220px;
+        }
+
+        .map-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 310px;
+            gap: 15px;
+        }
+
+        #archive-map {
+            width: 100%;
+            height: 610px;
+            border: 1px solid #d9e1ea;
+            border-radius: 14px;
+            background: #dce6ee;
+            box-shadow: 0 5px 18px rgba(15, 38, 67, .09);
+        }
+
+        .materials {
+            height: 610px;
+            overflow-y: auto;
+            padding-right: 3px;
+        }
+
+        .material-card {
+            margin-bottom: 10px;
+            padding: 14px;
+            border: 1px solid #dce3eb;
+            border-left: 4px solid #d4a84f;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .material-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 14px rgba(20, 45, 75, .12);
+        }
+
+        .material-card h3 {
+            margin: 0 0 7px;
+            font-size: 15px;
+            line-height: 1.35;
+        }
+
+        .meta {
+            margin: 4px 0;
+            color: #66788e;
+            font-size: 12px;
+        }
+
+        .source {
+            margin-top: 8px;
+            color: #87601c;
+            font-size: 12px;
+        }
+
+        .empty {
+            padding: 35px 20px;
+            border-radius: 12px;
+            color: #68798c;
+            background: white;
+            text-align: center;
+        }
+
+        .leaflet-popup-content {
+            min-width: 220px;
+        }
+
+        .popup-title {
+            margin-bottom: 7px;
+            color: #10213a;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .popup-link {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 7px 10px;
+            border-radius: 6px;
+            color: white !important;
+            background: #1488bd;
+            text-decoration: none;
+        }
+
+        .map-credit {
+            margin-top: 9px;
+            color: #77879a;
+            font-size: 11px;
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                display: block;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .map-layout {
+                grid-template-columns: 1fr;
+            }
+
+            #archive-map {
+                height: 480px;
+            }
+
+            .materials {
+                height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="page">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-logo">S</div>
+
+            <div>
+                <h2>SyrMura <span>AI</span></h2>
+                <p>
+                    Қызылорда облысының<br>
+                    цифрлық архиві
+                </p>
+            </div>
+        </div>
+
+        <nav class="menu">
+            <a href="/">🏠 Басты бет</a>
+            
+            <a href="/archive">📁 Мұрағат</a>
+            <a href="/ai-archivist">🤖 ЖИ архивші</a>
+            <a href="/archive-map" class="active">🗺️ Архив картасы</a>
+            <a href="/timeline">🕘 Уақыт желісі</a>
+        </nav>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <h1>Архив картасы</h1>
+            <a href="/archive">Мұрағатқа өту</a>
+        </header>
+
+        <div class="content">
+            <section class="intro">
+                <h2>Қызылорда облысының тарихи картасы</h2>
+                <p>
+                    Картадан әкімші тексеріп жариялаған архив
+                    материалдарының географиялық орнын көре аласыз.
+                    Белгіні басып, құжат туралы толық мәлімет алыңыз.
+                </p>
+            </section>
+
+            <div class="tools">
+                <input
+                    type="search"
+                    id="map-search"
+                    placeholder="Құжатты немесе елді мекенді іздеу..."
+                >
+
+                <select id="map-category">
+                    <option value="">Барлық бөлімшелер</option>
+                    {% for subsection in subsections %}
+                        <option value="{{ subsection }}">
+                            {{ subsection }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="map-layout">
+                <div id="archive-map"></div>
+
+                <div class="materials" id="material-list">
+                    {% if documents %}
+                        {% for doc in documents %}
+                        <article
+                            class="material-card"
+                            data-id="{{ doc.id }}"
+                            data-title="{{ doc.title|lower }}"
+                            data-location="{{ doc.location_name|lower }}"
+                            data-subsection="{{ doc.subsection }}"
+                            onclick="focusDocument({{ doc.id }})"
+                        >
+                            <h3>{{ doc.title }}</h3>
+
+                            <div class="meta">
+                                📅 {{ doc.document_year or "Жылы көрсетілмеген" }}
+                            </div>
+
+                            <div class="meta">
+                                📂 {{ doc.subsection or "Мұрағат материалы" }}
+                            </div>
+
+                            <div class="meta">
+                                📍 {{ doc.location_name }}
+                            </div>
+
+                            {% if doc.source_name %}
+                            <div class="source">
+                                Дереккөз: {{ doc.source_name }}
+                            </div>
+                            {% endif %}
+                        </article>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty">
+                            <h3>Картада материал жоқ</h3>
+                            <p>
+                                Жарияланған материалдарға координаттар
+                                енгізілгеннен кейін олар картада пайда болады.
+                            </p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="map-credit">
+                Карта деректері:
+                © OpenStreetMap қатысушылары.
+                Архив материалы әкімші рұқсатымен жарияланады.
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    const archiveDocuments = {{ documents|tojson }};
+    const markerRegistry = {};
+    let archiveMap;
+
+    function escapeHtml(value) {
+        const div = document.createElement("div");
+        div.textContent = value || "";
+        return div.innerHTML;
+    }
+
+    function startMap() {
+        archiveMap = L.map("archive-map", {
+            zoomControl: true
+        }).setView([44.85, 65.48], 7);
+
+        L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+                maxZoom: 19,
+                attribution: "© OpenStreetMap contributors"
+            }
+        ).addTo(archiveMap);
+
+        const bounds = [];
+
+        archiveDocuments.forEach(documentItem => {
+            const latitude = Number(documentItem.latitude);
+            const longitude = Number(documentItem.longitude);
+
+            if (!Number.isFinite(latitude) ||
+                !Number.isFinite(longitude)) {
+                return;
+            }
+
+            const fileButton = documentItem.file_url
+                ? `
+                    <a class="popup-link"
+                       href="${documentItem.file_url}"
+                       target="_blank">
+                       Құжатты көру
+                    </a>
+                  `
+                : "";
+
+            const popup = `
+                <div class="popup-title">
+                    ${escapeHtml(documentItem.title)}
+                </div>
+
+                <div>
+                    📅 ${escapeHtml(
+                        String(documentItem.document_year || "Көрсетілмеген")
+                    )}
+                </div>
+
+                <div>
+                    📍 ${escapeHtml(documentItem.location_name)}
+                </div>
+
+                <div>
+                    📂 ${escapeHtml(
+                        documentItem.subsection || "Мұрағат"
+                    )}
+                </div>
+
+                ${
+                    documentItem.source_name
+                    ? `<div>Дереккөз: ${
+                        escapeHtml(documentItem.source_name)
+                      }</div>`
+                    : ""
+                }
+
+                ${fileButton}
+            `;
+
+            const marker = L.marker([latitude, longitude])
+                .addTo(archiveMap)
+                .bindPopup(popup);
+
+            markerRegistry[documentItem.id] = marker;
+            bounds.push([latitude, longitude]);
+        });
+
+        if (bounds.length > 1) {
+            archiveMap.fitBounds(bounds, {
+                padding: [40, 40]
+            });
+        } else if (bounds.length === 1) {
+            archiveMap.setView(bounds[0], 12);
+        }
+    }
+
+    function focusDocument(documentId) {
+        const marker = markerRegistry[documentId];
+
+        if (!marker || !archiveMap) {
+            return;
+        }
+
+        archiveMap.setView(marker.getLatLng(), 13);
+        marker.openPopup();
+    }
+
+    function filterMaterials() {
+        const searchValue = document
+            .getElementById("map-search")
+            .value
+            .toLowerCase()
+            .trim();
+
+        const categoryValue = document
+            .getElementById("map-category")
+            .value;
+
+        document
+            .querySelectorAll(".material-card")
+            .forEach(card => {
+                const combinedText =
+                    card.dataset.title + " " +
+                    card.dataset.location;
+
+                const searchMatches =
+                    !searchValue ||
+                    combinedText.includes(searchValue);
+
+                const categoryMatches =
+                    !categoryValue ||
+                    card.dataset.subsection === categoryValue;
+
+                card.style.display =
+                    searchMatches && categoryMatches
+                    ? "block"
+                    : "none";
+            });
+    }
+
+    document
+        .getElementById("map-search")
+        .addEventListener("input", filterMaterials);
+
+    document
+        .getElementById("map-category")
+        .addEventListener("change", filterMaterials);
+
+    if (typeof L !== "undefined") {
+        startMap();
+    } else {
+        document.getElementById("archive-map").innerHTML = `
+            <div class="empty" style="margin:30px">
+                Карта кітапханасы жүктелмеді.
+                Интернет байланысын тексеріп, бетті жаңартыңыз.
+            </div>
+        `;
+    }
+</script>
+</body>
+</html>
